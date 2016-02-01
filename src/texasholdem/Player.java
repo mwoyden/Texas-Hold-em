@@ -13,17 +13,17 @@ public class Player extends Person {
         hand = new Card[2];
         x = 0;
         y = 0;
+        blind = 0;
+        status = 0;
     }
 
-    public Player(int c, int xPos, int yPos) {
+    public Player(String n, int c, int xPos, int yPos, int b) {
+        name = n;
         chips = c;
         hand = new Card[2];
         x = xPos;
         y = yPos;
-    }
-
-    public void bet(int b) {
-        bet = b;
-        chips -= b;
+        blind = b;
+        status = 1;
     }
 }

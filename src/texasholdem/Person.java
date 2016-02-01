@@ -6,18 +6,29 @@
 package texasholdem;
 
 public abstract class Person {
-    
-    public double chips = 0;
-    public double bet = 0;
+
+    public double chips;
+    public double bet;
     public Card[] hand;
     public int x;
     public int y;
-    
+    public String name;
+    public int blind;
+    public int status;
+
     public void fold() {
         bet = 0;
-        hand[0] = null;
-        hand[0].dealt = false;
-        hand[1] = null;
-        hand[1].dealt = false;
-    }    
+        hand[0] = new Card();
+        hand[1] = new Card();
+        status = 0;
+    }
+
+    public void bet(int b) {
+        bet = b;
+        chips -= b;
+    }
+    
+    public int decide(int round, int currentBet, Card[] board) {
+        return 0;
+    }
 }
