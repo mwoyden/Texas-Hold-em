@@ -10,7 +10,7 @@ public class Player extends Person {
     public Player() {
         chips = 0;
         bet = 0;
-        hand = new Card[2];
+        hole = new Card[2];
         x = 0;
         y = 0;
         blind = 0;
@@ -20,7 +20,7 @@ public class Player extends Person {
     public Player(String n, int c, int xPos, int yPos, int b) {
         name = n;
         chips = c;
-        hand = new Card[2];
+        hole = new Card[2];
         x = xPos;
         y = yPos;
         blind = b;
