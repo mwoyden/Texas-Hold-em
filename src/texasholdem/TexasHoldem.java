@@ -223,12 +223,9 @@ public class TexasHoldem extends JPanel {
     public static void placeBets() {
         System.out.println("PLACING BETS IN ROUND: " + round);
         currentBet = BB_BET;
-        if (round == 1) {
-            currentBet = SB_BET;
-        }
         int oldBet = currentBet, i = smallBlind, j = 0;
-        while (j < NUM_PLAYERS) {
-            if (j == 1) {
+        while (j < NUM_PLAYERS) { //make sure each player goes
+            if (currentBet < BB_BET) {
                 currentBet = BB_BET;
             }
             if (players[i].status != 0) {
@@ -238,15 +235,24 @@ public class TexasHoldem extends JPanel {
                     System.out.println("Player betting...");
                 } else if (players[i].name.contains("CPU")) {
                     System.out.println("CPU " + i + " BETTING...");
-                    if ((currentBet = players[i].decide(round, currentBet, board)) == 0) { //CPU folded
-                        System.out.println("CPU " + i + " FOLDED");
-                        if (i == smallBlind && round == 1) {
-                            currentBet = BB_BET;
+                    if ((currentBet = players[i].decide(round, currentBet, board, i, smallBlind, bigBlind)) == 0) { //CPU folded
+                        if (i == bigBlind && round == 1 && players[i].status == 1) {
+                            System.out.println("CPU " + i + " CHECKED");
+                            pot += currentBet;
+                            oldBet = currentBet;
                         } else {
-                            currentBet = oldBet;
+                            System.out.println("CPU " + i + " FOLDED");
+                            if (i == smallBlind && round == 1) {
+                                currentBet = BB_BET;
+                            } else {
+                                currentBet = oldBet;
+                            }
                         }
                     } else {
                         System.out.println("CPU " + i + " BET " + currentBet);
+                        if (i == smallBlind && round == 1) { //make sure small blind doesnt double call
+                            players[i].bet += SB_BET;
+                        }
                         pot += currentBet;
                         oldBet = currentBet;
                     }
@@ -308,6 +314,24 @@ public class TexasHoldem extends JPanel {
         Random rand = new Random();
         System.out.println("DEALING...");
         while (i < NUM_PLAYERS) {
+            if (i == smallBlind) {
+                if (players[i].name.contains("CPU")) {
+                    System.out.println("CPU " + i + " BET SB: " + SB_BET);
+                } else {
+                    System.out.println("Player BET SB: " + SB_BET);
+                }
+                pot += SB_BET;
+                players[i].bet(SB_BET);
+            }
+            if (i == bigBlind) {
+                if (players[i].name.contains("CPU")) {
+                    System.out.println("CPU " + i + " BET SB: " + BB_BET);
+                } else {
+                    System.out.println("Player BET SB: " + BB_BET);
+                }
+                pot += BB_BET;
+                players[i].bet(BB_BET);
+            }
             players[i].hole[0] = draw();
             players[i].hole[1] = draw();
             System.out.println(players[i].hole[0].id + " " + players[i].hole[1].id);

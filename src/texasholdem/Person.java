@@ -16,6 +16,8 @@ public abstract class Person {
     public int pairValue2;
     public int pair1;
     public int pair2;
+    public int highCard;
+    public int highSuit;
     public int flush;
     public int straight;
     public int raise;
@@ -42,7 +44,7 @@ public abstract class Person {
         return false;
     }
 
-    public int decide(int round, int currentBet, Card[] board) {
+    public int decide(int round, int currentBet, Card[] board, int i, int smallBlind, int bigBlind) {
         return 0;
     }
 }

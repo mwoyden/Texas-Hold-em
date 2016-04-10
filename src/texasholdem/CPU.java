@@ -19,7 +19,9 @@ public class CPU extends Person {
         pairValue1 = 0;
         pairValue2 = 0;
         pair1 = 0;
-        pair2= 0;
+        pair2 = 0;
+        highCard = 0;
+        highSuit = -1;
         flush = 0;
         straight = 0;
     }
@@ -37,7 +39,9 @@ public class CPU extends Person {
         pairValue1 = 0;
         pairValue2 = 0;
         pair1 = 0;
-        pair2= 0;
+        pair2 = 0;
+        highCard = 0;
+        highSuit = -1;
         flush = 0;
         straight = 0;
     }
@@ -48,7 +52,9 @@ public class CPU extends Person {
         pairValue1 = 0;
         pairValue2 = 0;
         pair1 = 0;
-        pair2= 0;
+        pair2 = 0;
+        highCard = 0;
+        highSuit = -1;
         flush = 0;
         straight = 0;
     }
@@ -57,6 +63,7 @@ public class CPU extends Person {
     public boolean call(int round, int currentBet, Card[] board) {
         boolean ret = false;
         if (currentBet > chips) {
+            System.out.println("CALL FOLD");
             fold();
             return false;
         }
@@ -68,47 +75,61 @@ public class CPU extends Person {
     }
 
     @Override
-    public int decide(int round, int currentBet, Card[] board) {
+    public int decide(int round, int currentBet, Card[] board, int i, int smallBlind, int bigBlind) {
         if (currentBet > chips) {
+            System.out.println("TOO FEW CHIPS FOLD");
             fold();
             return 0;
         }
         int ret = 0;
         raise = 0;
+        if (i == smallBlind) {
+            currentBet = 50;
+            System.out.println("PLAYING AS SMALLBLIND");
+        }
+        if (i == bigBlind) {
+            currentBet = 0;
+            System.out.println("PLAYING AS BIGBLIND");
+        }
         switch (round) {
             case 1:
                 if (preFlop()) {
                     ret = currentBet + raise;
                     printCards();
                 } else {
+                    System.out.println("PREFLOP FOLD");
                     fold();
                 }
                 break;
             case 2:
-                if (postFlop(board, round)) {
+                if (playRound(board, round, 50, 100, 50, 3, 4, 0.2)) {
                     ret = currentBet + raise;
                     printCards();
                 } else {
+                    System.out.println("POSTFLOP FOLD");
                     fold();
                 }
                 break;
             case 3:
-                if (postTurn(board, round)) {
+                if (playRound(board, round, 50, 100, 50, 4, 5, 0.1)) {
                     ret = currentBet + raise;
                     printCards();
                 } else {
+                    System.out.println("POSTTURN FOLD");
                     fold();
                 }
                 break;
             case 4:
-                if (postRiver(board, round)) {
+                if (playRound(board, round, 50, 100, 50, 5, 5, 0.05)) {
                     ret = currentBet + raise;
                     printCards();
                 } else {
+                    System.out.println("POSTRIVER FOLD");
                     fold();
                 }
                 break;
             default:
+                System.out.println("DEFAULT FOLD");
                 fold();
                 break;
         }
@@ -165,6 +186,7 @@ public class CPU extends Person {
         //If cards have same value, play the pair
         if (hole[0].value == hole[1].value) {
             pair1 = 2;
+            pairValue1 = hole[0].value;
             System.out.println("PLAYING PAIR IN ROUND 1");
             ret = true;
         }
@@ -182,6 +204,11 @@ public class CPU extends Person {
         //If player has high card, play high card
         if (hole[0].value >= 12 || hole[1].value >= 12) {
             System.out.println("PLAYING HIGH CARD IN ROUND 1");
+            if (hole[0].value >= hole[1].value) {
+                highCard = hole[0].value;
+            } else {
+                highCard = hole[1].value;
+            }
             ret = true;
         }
         //Bluff chance
@@ -193,101 +220,38 @@ public class CPU extends Person {
         return ret;
     }
 
-    public boolean postFlop(Card[] board, int round) {
+    public boolean playRound(Card[] board, int round, int raise2pair, int raiseFlush, int raiseStraight, int ifFlush, int ifStraight, double bluff) {
         boolean ret = false;
-        if (pair1 > 0) {
+        if (pair1 > 0 || pair2 > 0) {
             ret = true;
-            System.out.println("PLAYING PAIR IN ROUND 2");
-        } else if (checkPair(board, round)) {
-            System.out.println("PLAYING PAIR IN ROUND 2");
+            System.out.println("PLAYING PAIR IN ROUND " + round);
+        }
+        if (checkPair(board, round)) {
+            System.out.println("PLAYING PAIR IN ROUND " + round);
             ret = true;
-            raise(50);
+            if (pair1 >= 2 && pair2 >= 2) {
+                raise(raise2pair);
+            }
         }
         checkFlush(board, round);
-        if (flush >= 3) {
+        if (flush >= ifFlush) {
             ret = true;
-            System.out.println("PLAYING FLUSH IN ROUND 2");
-            if (flush >= 4) {
-                raise(50);
+            System.out.println("PLAYING FLUSH IN ROUND " + round);
+            if (flush >= ifFlush + 1) {
+                raise(raiseFlush);
             }
         }
         checkStraight(board, round);
-        if (straight >= 3) {
+        if (straight >= ifStraight) {
             ret = true;
-            System.out.println("PLAYING STRAIGHT IN ROUND 2");
-            if (straight >= 4) {
-                raise(50);
+            System.out.println("PLAYING STRAIGHT IN ROUND " + round);
+            if (straight >= ifStraight + 1) {
+                raise(raiseStraight);
             }
         }
         double x = Math.random();
-        if (x < 0.2 && ret == false) {
-            System.out.println("BLUFF IN ROUND 2");
-            ret = true;
-        }
-
-        return ret;
-    }
-
-    public boolean postTurn(Card[] board, int round) {
-        boolean ret = false;
-        if (pair1 > 0) {
-            ret = true;
-            System.out.println("PLAYING PAIR IN ROUND 3");
-        } else if (checkPair(board, round)) {
-            System.out.println("PLAYING PAIR IN ROUND 3");
-            ret = true;
-            raise(50);
-        }
-        checkFlush(board, round);
-        if (flush >= 4) {
-            ret = true;
-            System.out.println("PLAYING FLUSH IN ROUND 3");
-            if (flush >= 5) {
-                raise(50);
-            }
-        }
-        checkStraight(board, round);
-        if (straight >= 4) {
-            ret = true;
-            System.out.println("PLAYING STRAIGHT IN ROUND 3");
-            if (straight >= 5) {
-                raise(50);
-            }
-        }
-        double x = Math.random();
-        if (x < 0.1 && ret == false) {
-            System.out.println("BLUFF IN ROUND 3");
-            ret = true;
-        }
-
-        return ret;
-    }
-
-    public boolean postRiver(Card[] board, int round) {
-        boolean ret = false;
-        if (pair1 > 0) {
-            ret = true;
-            System.out.println("PLAYING PAIR IN ROUND 4");
-        } else if (checkPair(board, round)) {
-            System.out.println("PLAYING PAIR IN ROUND 4");
-            ret = true;
-            raise(50);
-        }
-        checkFlush(board, round);
-        if (flush >= 5) {
-            ret = true;
-            System.out.println("PLAYING FLUSH IN ROUND 4");
-            raise(50);
-        }
-        checkStraight(board, round);
-        if (straight >= 5) {
-            ret = true;
-            System.out.println("PLAYING STRAIGHT IN ROUND 4");
-            raise(100);
-        }
-        double x = Math.random();
-        if (x < 0.05 && ret == false) {
-            System.out.println("BLUFF IN ROUND 3");
+        if (x < bluff && ret == false) {
+            System.out.println("BLUFF IN ROUND " + round);
             ret = true;
         }
 
@@ -333,11 +297,32 @@ public class CPU extends Person {
     public boolean checkPair(Card[] board, int round) {
         boolean ret = false;
         int i = 0;
-        if (round < 3) {
-            for (Card c : board) {
-                if (hole[0].value == c.value || hole[1].value == c.value) {
-                    pair1++;
-                    ret = true;
+        if (round < 3) { // on the flop
+            for (Card c : board) { // for the 3 cards in the flop
+                if (hole[0].value == c.value || hole[1].value == c.value) { //if there is any kind of match
+                    if (pair1 >= 2 && c.value == pairValue1) { //looking for 3 or 4 of a kind, already pair in hole
+                        pair1++;
+                        ret = true;
+                    } else if (pair1 == 0) { //no pair in hole, looking for 2 pair
+                        if (hole[0].value == c.value) {
+                            if (pair1 == 0) {
+                                pair1 = 2;
+                                pairValue1 = c.value;
+                            } else {
+                                pair1++;
+                            }
+                            ret = true;
+                        }
+                        if (hole[1].value == c.value) {
+                            if (pair2 == 0) {
+                                pair2 = 2;
+                                pairValue2 = c.value;
+                            } else {
+                                pair2++;
+                            }
+                            ret = true;
+                        }
+                    }
                 }
                 i++;
                 if (i > round) {
@@ -345,9 +330,25 @@ public class CPU extends Person {
                 }
             }
         } else if (round >= 3) {
-            if (hole[0].value == board[round].value || hole[1].value == board[round].value) {
-                pair1++;
-                ret = true;
+            if (hole[0].value == board[round].value /*|| hole[1].value == board[round].value*/) {
+                if (hole[0].value == pairValue1) {
+                    pair1++;
+                    ret = true;
+                } else {
+                    pair1 = 2;
+                    pairValue1 = hole[0].value;
+                    ret = true;
+                }
+            }
+            if (hole[1].value == board[round].value) {
+                if (hole[1].value == pairValue2) {
+                    pair2++;
+                    ret = true;
+                } else {
+                    pair2 = 2;
+                    pairValue2 = hole[1].value;
+                    ret = true;
+                }
             }
         }
         return ret;
