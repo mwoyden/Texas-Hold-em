@@ -83,11 +83,11 @@ public class CPU extends Person {
         }
         int ret = 0;
         raise = 0;
-        if (i == smallBlind) {
+        if (i == smallBlind && round == 1) {
             currentBet = 50;
             System.out.println("PLAYING AS SMALLBLIND");
         }
-        if (i == bigBlind) {
+        if (i == bigBlind && round == 1) {
             currentBet = 0;
             System.out.println("PLAYING AS BIGBLIND");
         }
@@ -330,7 +330,9 @@ public class CPU extends Person {
                 }
             }
         } else if (round >= 3) {
-            if (hole[0].value == board[round].value /*|| hole[1].value == board[round].value*/) {
+            System.out.println("ROUND IN PAIR CHECK: " + round);
+            System.out.println("CARD VALUE: " + board[round].value);
+            if (hole[0].value == board[round].value /*|| hole[1].value == board[round].value*/) { // NULL POINTER SOMETIMES
                 if (hole[0].value == pairValue1) {
                     pair1++;
                     ret = true;

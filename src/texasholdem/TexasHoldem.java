@@ -24,6 +24,7 @@ public class TexasHoldem extends JPanel {
     public static Person[] players;
     public static BufferedImage image;
     public static String path;
+    public static boolean won = false;
     public static int pot, round, currentBet, smallBlind, bigBlind;
 
     private static final int CLUB = 0, SPADE = 1, HEART = 2, DIAMOND = 3;
@@ -35,32 +36,32 @@ public class TexasHoldem extends JPanel {
 
     private static final String dir = System.getProperty("user.dir") + "\\src\\texasholdem\\sprites\\";
     private static final String[] DECK_MAP = new String[]{
-        dir + "ace_club.jpg", dir + "ace_spade.jpg", dir + "ace_heart.jpg", dir + "ace_diamond.jpg",
-        dir + "two_club.jpg", dir + "two_spade.jpg", dir + "two_heart.jpg", dir + "two_diamond.jpg",
-        dir + "three_club.jpg", dir + "three_spade.jpg", dir + "three_heart.jpg", dir + "three_diamond.jpg",
-        dir + "four_club.jpg", dir + "four_spade.jpg", dir + "four_heart.jpg", dir + "four_diamond.jpg",
-        dir + "five_club.jpg", dir + "five_spade.jpg", dir + "five_heart.jpg", dir + "five_diamond.jpg",
-        dir + "six_club.jpg", dir + "six_spade.jpg", dir + "six_heart.jpg", dir + "six_diamond.jpg",
-        dir + "seven_club.jpg", dir + "seven_spade.jpg", dir + "seven_heart.jpg", dir + "seven_diamond.jpg",
-        dir + "eight_club.jpg", dir + "eight_spade.jpg", dir + "eight_heart.jpg", dir + "eight_diamond.jpg",
-        dir + "nine_club.jpg", dir + "nine_spade.jpg", dir + "nine_heart.jpg", dir + "nine_diamond.jpg",
-        dir + "ten_club.jpg", dir + "ten_spade.jpg", dir + "ten_heart.jpg", dir + "ten_diamond.jpg",
-        dir + "jack_club.jpg", dir + "jack_spade.jpg", dir + "jack_heart.jpg", dir + "jack_diamond.jpg",
-        dir + "queen_club.jpg", dir + "queen_spade.jpg", dir + "queen_heart.jpg", dir + "queen_diamond.jpg",
-        dir + "king_club.jpg", dir + "king_spade.jpg", dir + "king_heart.jpg", dir + "king_diamond.jpg",
-        dir + "ace_club.jpg", dir + "ace_spade.jpg", dir + "ace_heart.jpg", dir + "ace_diamond.jpg",
-        dir + "two_club.jpg", dir + "two_spade.jpg", dir + "two_heart.jpg", dir + "two_diamond.jpg",
-        dir + "three_club.jpg", dir + "three_spade.jpg", dir + "three_heart.jpg", dir + "three_diamond.jpg",
-        dir + "four_club.jpg", dir + "four_spade.jpg", dir + "four_heart.jpg", dir + "four_diamond.jpg",
-        dir + "five_club.jpg", dir + "five_spade.jpg", dir + "five_heart.jpg", dir + "five_diamond.jpg",
-        dir + "six_club.jpg", dir + "six_spade.jpg", dir + "six_heart.jpg", dir + "six_diamond.jpg",
-        dir + "seven_club.jpg", dir + "seven_spade.jpg", dir + "seven_heart.jpg", dir + "seven_diamond.jpg",
-        dir + "eight_club.jpg", dir + "eight_spade.jpg", dir + "eight_heart.jpg", dir + "eight_diamond.jpg",
-        dir + "nine_club.jpg", dir + "nine_spade.jpg", dir + "nine_heart.jpg", dir + "nine_diamond.jpg",
-        dir + "ten_club.jpg", dir + "ten_spade.jpg", dir + "ten_heart.jpg", dir + "ten_diamond.jpg",
-        dir + "jack_club.jpg", dir + "jack_spade.jpg", dir + "jack_heart.jpg", dir + "jack_diamond.jpg",
-        dir + "queen_club.jpg", dir + "queen_spade.jpg", dir + "queen_heart.jpg", dir + "queen_diamond.jpg",
-        dir + "king_club.jpg", dir + "king_spade.jpg", dir + "king_heart.jpg", dir + "king_diamond.jpg"};
+        dir + "ace_clubs.jpg", dir + "ace_spades.jpg", dir + "ace_hearts.jpg", dir + "ace_diamonds.jpg",
+        dir + "two_clubs.jpg", dir + "two_spades.jpg", dir + "two_hearts.jpg", dir + "two_diamonds.jpg",
+        dir + "three_clubs.jpg", dir + "three_spades.jpg", dir + "three_hearts.jpg", dir + "three_diamonds.jpg",
+        dir + "four_clubs.jpg", dir + "four_spades.jpg", dir + "four_hearts.jpg", dir + "four_diamonds.jpg",
+        dir + "five_clubs.jpg", dir + "five_spades.jpg", dir + "five_hearts.jpg", dir + "five_diamonds.jpg",
+        dir + "six_clubs.jpg", dir + "six_spades.jpg", dir + "six_hearts.jpg", dir + "six_diamonds.jpg",
+        dir + "seven_clubs.jpg", dir + "seven_spades.jpg", dir + "seven_hearts.jpg", dir + "seven_diamonds.jpg",
+        dir + "eight_clubs.jpg", dir + "eight_spades.jpg", dir + "eight_hearts.jpg", dir + "eight_diamonds.jpg",
+        dir + "nine_clubs.jpg", dir + "nine_spades.jpg", dir + "nine_hearts.jpg", dir + "nine_diamonds.jpg",
+        dir + "ten_clubs.jpg", dir + "ten_spades.jpg", dir + "ten_hearts.jpg", dir + "ten_diamonds.jpg",
+        dir + "jack_clubs.jpg", dir + "jack_spades.jpg", dir + "jack_hearts.jpg", dir + "jack_diamonds.jpg",
+        dir + "queen_clubs.jpg", dir + "queen_spades.jpg", dir + "queen_hearts.jpg", dir + "queen_diamonds.jpg",
+        dir + "king_clubs.jpg", dir + "king_spades.jpg", dir + "king_hearts.jpg", dir + "king_diamonds.jpg",
+        dir + "ace_clubs.jpg", dir + "ace_spades.jpg", dir + "ace_hearts.jpg", dir + "ace_diamonds.jpg",
+        dir + "two_clubs.jpg", dir + "two_spades.jpg", dir + "two_hearts.jpg", dir + "two_diamonds.jpg",
+        dir + "three_clubs.jpg", dir + "three_spades.jpg", dir + "three_hearts.jpg", dir + "three_diamonds.jpg",
+        dir + "four_clubs.jpg", dir + "four_spades.jpg", dir + "four_hearts.jpg", dir + "four_diamonds.jpg",
+        dir + "five_clubs.jpg", dir + "five_spades.jpg", dir + "five_hearts.jpg", dir + "five_diamonds.jpg",
+        dir + "six_clubs.jpg", dir + "six_spades.jpg", dir + "six_hearts.jpg", dir + "six_diamonds.jpg",
+        dir + "seven_clubs.jpg", dir + "seven_spades.jpg", dir + "seven_hearts.jpg", dir + "seven_diamonds.jpg",
+        dir + "eight_clubs.jpg", dir + "eight_spades.jpg", dir + "eight_hearts.jpg", dir + "eight_diamonds.jpg",
+        dir + "nine_clubs.jpg", dir + "nine_spades.jpg", dir + "nine_hearts.jpg", dir + "nine_diamonds.jpg",
+        dir + "ten_clubs.jpg", dir + "ten_spades.jpg", dir + "ten_hearts.jpg", dir + "ten_diamonds.jpg",
+        dir + "jack_clubs.jpg", dir + "jack_spades.jpg", dir + "jack_hearts.jpg", dir + "jack_diamonds.jpg",
+        dir + "queen_clubs.jpg", dir + "queen_spades.jpg", dir + "queen_hearts.jpg", dir + "queen_diamonds.jpg",
+        dir + "king_clubs.jpg", dir + "king_spades.jpg", dir + "king_hearts.jpg", dir + "king_diamonds.jpg"};
 
     public static void main(String[] args) {
         init();
@@ -82,22 +83,20 @@ public class TexasHoldem extends JPanel {
                 case 1:
                     deal();
                     placeBets();
-                    //checkPlayers();
                     flop();
+
                     break;
                 case 2:
                     placeBets();
-                    //checkPlayers();
                     turn();
+
                     break;
                 case 3:
                     placeBets();
-                    //checkPlayers();
                     river();
                     break;
                 case 4:
                     placeBets();
-                    //checkPlayers();
                     int win = 0;
                     for (Person p : players) {
                         if (p.status == 1) {
@@ -107,6 +106,7 @@ public class TexasHoldem extends JPanel {
                     if (win == 1) {
                         checkWinner();
                     }
+                    break;
                 default:
                     reset();
                     break;
@@ -238,6 +238,7 @@ public class TexasHoldem extends JPanel {
                     if ((currentBet = players[i].decide(round, currentBet, board, i, smallBlind, bigBlind)) == 0) { //CPU folded
                         if (i == bigBlind && round == 1 && players[i].status == 1) {
                             System.out.println("CPU " + i + " CHECKED");
+                            players[i].bet += BB_BET;
                             pot += currentBet;
                             oldBet = currentBet;
                         } else {
@@ -351,24 +352,7 @@ public class TexasHoldem extends JPanel {
 
     public static void init() {
         System.out.println("INITIALIZING GAME...");
-        frame = new JFrame("Texas Hold'em");
         game = new TexasHoldem();
-        layer = new JLayeredPane();
-        /*
-        layer.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-        layer.add(game);
-        frame.add(layer);
-        frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        path = System.getProperty("user.dir") + "\\src\\texasholdem\\sprites\\table.jpg";
-        frame.getContentPane().add(initImage(path, 0, 0, FRAME_WIDTH, FRAME_HEIGHT));
-        frame.pack();
-        //USEFUL-- loads a card on top
-        path = System.getProperty("user.dir") + "\\src\\texasholdem\\sprites\\card_back.jpg";
-        frame.getContentPane().add(initImage(path, 325, 1, CARD_WIDTH, CARD_HEIGHT), 1);
-        frame.setLocation(200, 200);
-        frame.setVisible(true);
-         */
     }
 
     public static void initPlayers(int chips) {
@@ -397,20 +381,6 @@ public class TexasHoldem extends JPanel {
                 v++;
             }
         }
-    }
-
-    public static JLabel initImage(String path, int x, int y, int w, int h) {
-        File file = new File(path);
-        //BufferedImage image = null;
-        try {
-            image = ImageIO.read(file);
-        } catch (IOException ex) {
-            Logger.getLogger(TexasHoldem.class.getName()).log(Level.SEVERE, null, ex);
-        }
-//        JLabel ret = new JLabel(new ImageIcon(image));
-//        ret.repaint();
-//        return ret;
-        return new JLabel(new ImageIcon(image));
     }
 
     public TexasHoldem() {
