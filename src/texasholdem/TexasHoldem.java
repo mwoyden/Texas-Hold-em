@@ -12,14 +12,16 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
+import static java.lang.Thread.sleep;
 import javax.imageio.*;
 import javax.swing.*;
+import static texasholdem.GUI.*;
 
 public class TexasHoldem extends JPanel {
 
-    public static JFrame frame;
+    public static JFrame jf;
+    public static GUI test;
     public static TexasHoldem game;
-    public static JLayeredPane layer;
     public static Card[] deck, board;
     public static Person[] players;
     public static BufferedImage image;
@@ -33,9 +35,10 @@ public class TexasHoldem extends JPanel {
     private static final int FRAME_WIDTH = 400, FRAME_HEIGHT = 300;
     private static final int NUM_PLAYERS = 5;
     private static final int SB_BET = 50, BB_BET = 100;
+   
 
-    private static final String dir = System.getProperty("user.dir") + "\\src\\texasholdem\\sprites\\";
-    private static final String[] DECK_MAP = new String[]{
+    private static final String dir = System.getProperty("user.dir") + "/src/texasholdem/sprites/";
+    public static final String[] DECK_MAP = new String[]{
         dir + "ace_clubs.jpg", dir + "ace_spades.jpg", dir + "ace_hearts.jpg", dir + "ace_diamonds.jpg",
         dir + "two_clubs.jpg", dir + "two_spades.jpg", dir + "two_hearts.jpg", dir + "two_diamonds.jpg",
         dir + "three_clubs.jpg", dir + "three_spades.jpg", dir + "three_hearts.jpg", dir + "three_diamonds.jpg",
@@ -74,6 +77,13 @@ public class TexasHoldem extends JPanel {
          //*/
         play();
     }
+    
+    public static void sleepGUI(int time){
+        try {
+            sleep(time);
+        } catch (InterruptedException ex) {
+        }
+    }
 
     public static void play() {
         round = 1;
@@ -84,7 +94,7 @@ public class TexasHoldem extends JPanel {
                     deal();
                     placeBets();
                     flop();
-
+                    initGUI();
                     break;
                 case 2:
                     placeBets();
@@ -94,6 +104,7 @@ public class TexasHoldem extends JPanel {
                 case 3:
                     placeBets();
                     river();
+                    //initGUI();
                     break;
                 case 4:
                     placeBets();
@@ -106,7 +117,15 @@ public class TexasHoldem extends JPanel {
                     if (win == 1) {
                         checkWinner();
                     }
-                    break;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(TexasHoldem.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    //initGUI();
+                    return;
+                    //break;
+                    
                 default:
                     reset();
                     break;
@@ -117,6 +136,7 @@ public class TexasHoldem extends JPanel {
                 Logger.getLogger(TexasHoldem.class.getName()).log(Level.SEVERE, null, ex);
             }
             round++;
+
         }
     }
 
@@ -350,9 +370,36 @@ public class TexasHoldem extends JPanel {
         return deck[card];
     }
 
+    public static void initGUI() {
+        test = new GUI();
+
+        jf = new JFrame();
+        jf.setTitle("Texas Hold'em");
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //adds table and first card
+        jf.add(test);
+        jf.setSize(600, 400);
+        jf.setVisible(true);
+
+        //wait 1.5 seconds to deal the flop face down
+        sleepGUI(3000);
+        setFlopDealing();
+
+        //wait 1.5 seconds to deal the turn
+        sleepGUI(1000);
+        setTurnDealing();
+
+        //wait 1.5 seconds to deal the turn
+        sleepGUI(1000);
+        setRiverDealing();
+    }
+
     public static void init() {
         System.out.println("INITIALIZING GAME...");
         game = new TexasHoldem();
+        //initGUI();
+
     }
 
     public static void initPlayers(int chips) {
