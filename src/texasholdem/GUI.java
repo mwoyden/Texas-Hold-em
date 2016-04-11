@@ -135,7 +135,8 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealTurn(Graphics g, String card) {
         //first card
-        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card + ".jpg";
+        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card + ".jpg";
+        path = card;
         i = new ImageIcon(path);
         image = i.getImage();
         g.drawImage(image, turnX, turnY, this);
@@ -143,7 +144,8 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealRiver(Graphics g, String card) {
         //first card
-        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card + ".jpg";
+        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card + ".jpg";
+        path = card;
         i = new ImageIcon(path);
         image = i.getImage();
         g.drawImage(image, riverX, riverY, this);
@@ -187,10 +189,10 @@ public class GUI extends JPanel implements ActionListener {
         dealFlop(g, DECK_MAP[board[0].id], DECK_MAP[board[1].id], DECK_MAP[board[2].id]);
 
         //deals one card for the turn
-        dealTurn(g, "king_spades");
+        dealTurn(g, DECK_MAP[board[3].id]);
 
         //deals one card for the river
-        dealRiver(g, "ace_spades");
+        dealRiver(g, DECK_MAP[board[4].id]);
 
         //shows extra cards on table
         showExtraCards(g, "card_back", "card_back", "card_back");

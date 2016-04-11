@@ -94,19 +94,17 @@ public class TexasHoldem extends JPanel {
                     deal();
                     placeBets();
                     flop();
-                    initGUI();
                     break;
                 case 2:
                     placeBets();
                     turn();
-
                     break;
                 case 3:
                     placeBets();
                     river();
-                    //initGUI();
                     break;
                 case 4:
+                    initGUI();
                     placeBets();
                     int win = 0;
                     for (Person p : players) {
