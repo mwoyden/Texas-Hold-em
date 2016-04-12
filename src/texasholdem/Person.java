@@ -47,4 +47,7 @@ public abstract class Person {
     public int decide(int round, int currentBet, Card[] board, int i, int smallBlind, int bigBlind) {
         return 0;
     }
+    
+    public void evaluate(Card[] board) {
+    }
 }
