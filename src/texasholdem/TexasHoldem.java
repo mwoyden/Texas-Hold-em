@@ -27,7 +27,6 @@ public class TexasHoldem extends JPanel {
     public static Person[] players;
     public static BufferedImage image;
     public static String path;
-    public static boolean won = false;
     public static int pot, round, currentBet, smallBlind, bigBlind;
 
     //Final variables
@@ -37,6 +36,11 @@ public class TexasHoldem extends JPanel {
     private static final int FRAME_WIDTH = 400, FRAME_HEIGHT = 300;
     private static final int NUM_PLAYERS = 5;
     private static final int SB_BET = 50, BB_BET = 100;
+
+    //GUI control variables
+    public static int flag;
+    public static boolean dealt, flopped, turnt, rivered;
+    public static boolean[] bets = new boolean[NUM_PLAYERS];
 
     //Deck Map is used to map values in program to sprites in the GUI
     private static final String dir = System.getProperty("user.dir") + "/src/texasholdem/sprites/";
@@ -98,6 +102,7 @@ public class TexasHoldem extends JPanel {
      */
     public static void play() {
         round = 1;
+        initGUI();
         while (true) {
             System.out.println("ROUND: " + round);
             switch (round) {
@@ -237,8 +242,18 @@ public class TexasHoldem extends JPanel {
         smallBlind = (smallBlind + 1) % NUM_PLAYERS;
         bigBlind = (bigBlind + 1) % NUM_PLAYERS;
         pot = 0;
+        dealt = flopped = turnt = rivered = false;
+        resetGUI();
+        resetFlags();
         resetPlayers();
         resetDeck();
+    }
+
+    public static void resetFlags() {
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            bets[i] = false;
+        }
+        flag = 0;
     }
 
     /**
@@ -251,7 +266,6 @@ public class TexasHoldem extends JPanel {
             if (p.chips > 0) {
                 p.fold();
                 p.status = 1;
-
             }
         }
     }
@@ -273,6 +287,11 @@ public class TexasHoldem extends JPanel {
             board[i] = draw();
             i++;
         }
+        System.out.println("FLAG: " + flag);
+        if (flag == 5) {
+            setFlopDealing();
+        }
+        resetFlags();
         printBoard(2);
     }
 
@@ -280,6 +299,11 @@ public class TexasHoldem extends JPanel {
         System.out.println("TURN...");
         board[3] = new Card();
         board[3] = draw();
+        System.out.println("FLAG: " + flag);
+        if (flag == 5) {
+            setTurnDealing();
+        }
+        resetFlags();
         printBoard(3);
     }
 
@@ -287,6 +311,11 @@ public class TexasHoldem extends JPanel {
         System.out.println("RIVER...");
         board[4] = new Card();
         board[4] = draw();
+        System.out.println("FLAG: " + flag);
+        if (flag == 5) {
+            setRiverDealing();
+        }
+        resetFlags();
         printBoard(4);
     }
 
@@ -294,55 +323,54 @@ public class TexasHoldem extends JPanel {
         System.out.println("PLACING BETS IN ROUND: " + round);
         currentBet = BB_BET;
         int oldBet = currentBet, i = smallBlind, j = 0;
+        String s = "";
         while (j < NUM_PLAYERS) { //make sure each player goes
-            //System.out.println("=========CURRENT BET 1: " + currentBet + "==============");
+            System.out.println("FLAG: " + flag);
             if (j == 0) {
                 currentBet = 0;
             }
-            //System.out.println("=========CURRENT BET 2: " + currentBet + "==============");
             if (currentBet < BB_BET && round == 1) {
                 currentBet = BB_BET;
             }
-            //oldBet = currentBet;
-            //System.out.println("=========CURRENT BET 3: " + currentBet + "==============");
             if (players[i].status != 0) {
                 if (players[i].name.equals("Player")) {
                     //turn();
                     players[i].status = 0;
                     System.out.println("Player betting...");
+                    bets[i] = true;
                 } else if (players[i].name.contains("CPU")) {
-                    System.out.println("CPU " + i + " BETTING...");
+                    s = "CPU " + i + " BETTING...";
+                    waitCPU(bets, i, s);
                     if ((currentBet = players[i].decide(round, currentBet, board, i, smallBlind, bigBlind)) == 0) { //CPU folded or checked
-                        //System.out.println("=========CURRENT BET 4: " + currentBet + "==============");
                         if (i == bigBlind && round == 1 && players[i].status == 1) { //If big blind checks in round 1
-                            System.out.println("BIG BLIND (CPU " + i + ") CHECKED");
+                            s = "BIG BLIND (CPU " + i + ") CHECKED";
+                            waitCPU(bets, i, s);
                             players[i].bet += BB_BET;
                             pot += currentBet;
-                            //oldBet = currentBet;
                         }
-
-                        //System.out.println("=========CURRENT BET 5: " + currentBet + "==============");
                         if (players[i].status == 1) {
-                            System.out.println("CPU " + i + " CHECKED");
+                            s = "CPU " + i + " CHECKED";
+                            waitCPU(bets, i, s);
                         } else {
-                            System.out.println("CPU " + i + " FOLDED");
+                            s = "CPU " + i + " FOLDED";
+                            waitCPU(bets, i, s);
                             if (i == smallBlind && round == 1) {
                                 currentBet = BB_BET;
-                            } else {
-                                //currentBet = oldBet;
                             }
-                            //System.out.println("=========CURRENT BET 6: " + currentBet + "==============");
                         }
                     } else {
-                        System.out.println("CPU " + i + " BET " + currentBet);
+                        s = "CPU " + i + " BET " + currentBet;
+                        waitCPU(bets, i, s);
                         if (i == smallBlind && round == 1) { //make sure small blind doesnt double call
                             players[i].bet += SB_BET;
                         }
                         pot += currentBet;
-                        //oldBet = currentBet;
                     }
+                    s = "DONE";
+                    waitCPU(bets, i, s);
                 }
             }
+            flag++;
             if (checkPlayers()) {
                 return;
             }
@@ -365,6 +393,17 @@ public class TexasHoldem extends JPanel {
             j++;
         }
         System.out.println(pot);
+    }
+
+    public static void waitCPU(boolean bets[], int i, String s) {
+        if (s.equalsIgnoreCase("DONE")) {
+            bets[i] = true; // NOT CURRENTLY BEING USED
+        }
+        System.out.println(s);
+        try {
+            sleep(600);
+        } catch (InterruptedException ex) {
+        }
     }
 
     public static void printBoard(int round) {
@@ -422,6 +461,7 @@ public class TexasHoldem extends JPanel {
             System.out.println(players[i].hole[0].id + " " + players[i].hole[1].id);
             i++;
         }
+        setDealing();
     }
 
     /**
@@ -456,15 +496,14 @@ public class TexasHoldem extends JPanel {
 
         //wait 1.5 seconds to deal the flop face down
         sleepGUI(3000);
-        setFlopDealing();
+        //setFlopDealing();
 
         //wait 1.5 seconds to deal the turn
-        sleepGUI(1000);
-        setTurnDealing();
-
+        //sleepGUI(1000);
+        //setTurnDealing();
         //wait 1.5 seconds to deal the turn
-        sleepGUI(1000);
-        setRiverDealing();
+        //sleepGUI(1000);
+        //setRiverDealing();
     }
 
     /**

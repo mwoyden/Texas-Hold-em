@@ -30,7 +30,7 @@ public class GUI extends JPanel implements ActionListener {
     String path;
     ImageIcon i;
     String cardName;
-    boolean cpuDealing = true;
+    static boolean cpuDealing = false;
     static boolean flopDealing = false;
     static boolean turnDealing = false;
     static boolean riverDealing = false;
@@ -41,35 +41,35 @@ public class GUI extends JPanel implements ActionListener {
     int[] extraY = {STARTING_Y, STARTING_Y + 2, STARTING_Y + 4};
 
     /* CPUS GLOBAL VARIABLES*/
-    int[] cpuX = {STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X};
-    int[] cpuY = {STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y};
-    int[] YVel = {VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY};
-    int[] XVel = {VELOCITY, VELOCITY, -VELOCITY, -VELOCITY, VELOCITY, VELOCITY, -VELOCITY, -VELOCITY, VELOCITY};
+    static int[] cpuX = {STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X};
+    static int[] cpuY = {STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y, STARTING_Y};
+    static int[] YVel = {VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY, VELOCITY};
+    static int[] XVel = {VELOCITY, VELOCITY, -VELOCITY, -VELOCITY, VELOCITY, VELOCITY, -VELOCITY, -VELOCITY, VELOCITY};
 
     /* PLAYER'S GLOBAL VARIABLES*/
-    int[] playerX = {STARTING_X, STARTING_X};
-    int[] playerY = {STARTING_Y, STARTING_Y};
-    int[] playerXVel = {-VELOCITY, -VELOCITY};
-    int[] playerYVel = {VELOCITY, VELOCITY};
+    static int[] playerX = {STARTING_X, STARTING_X};
+    static int[] playerY = {STARTING_Y, STARTING_Y};
+    static int[] playerXVel = {-VELOCITY, -VELOCITY};
+    static int[] playerYVel = {VELOCITY, VELOCITY};
 
     /* FLOP'S GLOBAL VARIABLES*/
-    int[] flopX = {STARTING_X, STARTING_X, STARTING_X};
-    int[] flopY = {STARTING_Y, STARTING_Y, STARTING_Y};
-    int[] flopXVel = {-VELOCITY, -VELOCITY, -VELOCITY};
-    int[] flopYVel = {VELOCITY, VELOCITY, VELOCITY};
+    static int[] flopX = {STARTING_X, STARTING_X, STARTING_X};
+    static int[] flopY = {STARTING_Y, STARTING_Y, STARTING_Y};
+    static int[] flopXVel = {-VELOCITY, -VELOCITY, -VELOCITY};
+    static int[] flopYVel = {VELOCITY, VELOCITY, VELOCITY};
 
 
     /* TURN'S GLOBAL VARIABLES*/
-    int turnX = STARTING_X;
-    int turnY = STARTING_Y;
-    int turnXVel = -VELOCITY;
-    int turnYVel = VELOCITY;
+    static int turnX = STARTING_X;
+    static int turnY = STARTING_Y;
+    static int turnXVel = -VELOCITY;
+    static int turnYVel = VELOCITY;
 
     /* RIVER'S GLOBAL VARIABLE*/
-    int riverX = STARTING_X;
-    int riverY = STARTING_Y;
-    int riverXVel = -VELOCITY;
-    int riverYVel = VELOCITY;
+    static int riverX = STARTING_X;
+    static int riverY = STARTING_Y;
+    static int riverXVel = -VELOCITY;
+    static int riverYVel = VELOCITY;
 
     int j = 0, k = 0;
 
@@ -179,20 +179,28 @@ public class GUI extends JPanel implements ActionListener {
         //draws the table
         createTable(g);
 
-        //deals facedown cards for the CPU's
-        dealCPU(g);
+        if (cpuDealing) {
+            //deals facedown cards for the CPU's
+            dealCPU(g);
 
-        //deals face up cards for the player
-        dealPlayer(g, DECK_MAP[players[2].hole[0].id], DECK_MAP[players[2].hole[1].id]);
+            //deals face up cards for the player
+            dealPlayer(g, DECK_MAP[players[2].hole[0].id], DECK_MAP[players[2].hole[1].id]);
+        }
 
         //deals three cards face down for the flop
-        dealFlop(g, DECK_MAP[board[0].id], DECK_MAP[board[1].id], DECK_MAP[board[2].id]);
+        if (flopDealing) {
+            dealFlop(g, DECK_MAP[board[0].id], DECK_MAP[board[1].id], DECK_MAP[board[2].id]);
+        }
 
         //deals one card for the turn
-        dealTurn(g, DECK_MAP[board[3].id]);
+        if (turnDealing) {
+            dealTurn(g, DECK_MAP[board[3].id]);
+        }
 
         //deals one card for the river
-        dealRiver(g, DECK_MAP[board[4].id]);
+        if (riverDealing) {
+            dealRiver(g, DECK_MAP[board[4].id]);
+        }
 
         //shows extra cards on table
         showExtraCards(g, "card_back", "card_back", "card_back");
@@ -341,6 +349,10 @@ public class GUI extends JPanel implements ActionListener {
 
     }
 
+    public static void setDealing() {
+        cpuDealing = true;
+    }
+
     public static void setFlopDealing() {
         flopDealing = true;
     }
@@ -352,6 +364,65 @@ public class GUI extends JPanel implements ActionListener {
     public static void setRiverDealing() {
         riverDealing = true;
     }
+
+    public static void resetDealing() {
+        cpuDealing = false;
+    }
+
+    public static void resetFlopDealing() {
+        flopDealing = false;
+    }
+
+    public static void resetTurnDealing() {
+        turnDealing = false;
+    }
+
+    public static void resetRiverDealing() {
+        riverDealing = false;
+    }
+
+    public static void resetGUI() {
+        int i = 0;
+        for (i = 0; i < cpuX.length; i++) {
+            cpuX[i] = STARTING_X;
+            cpuY[i] = STARTING_Y;
+        }
+        for (i = 0; i < YVel.length; i++) {
+            YVel[i] = VELOCITY;
+            XVel[i] = VELOCITY;
+            if (i == 2 || i == 3 || i == 6 || i == 7) {
+                XVel[i] = -VELOCITY;
+            }
+        }
+        for (i = 0; i < playerX.length; i++) {
+            playerX[i] = STARTING_X;
+            playerY[i] = STARTING_Y;
+            playerXVel[i] = -VELOCITY;
+            playerYVel[i] = VELOCITY;
+        }
+        for (i = 0; i < flopX.length; i++) {
+            flopX[i] = STARTING_X;
+            flopY[i] = STARTING_Y;
+            flopXVel[i] = -VELOCITY;
+            flopYVel[i] = VELOCITY;
+        }
+
+        turnX = STARTING_X;
+        turnY = STARTING_Y;
+        turnXVel = -VELOCITY;
+        turnYVel = VELOCITY;
+
+        riverX = STARTING_X;
+        riverY = STARTING_Y;
+        riverXVel = -VELOCITY;
+        riverYVel = VELOCITY;
+        
+        resetDealing();
+        resetFlopDealing();
+        resetTurnDealing();
+        resetRiverDealing();
+    }
+
     /*
     public static void main(String[] args) {
         GUI test = new GUI();
