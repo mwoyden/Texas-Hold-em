@@ -2,14 +2,9 @@
 package texasholdem;
 
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
-import java.awt.*;
 import java.awt.image.*;
-import java.io.*;
 import static java.lang.Thread.sleep;
-import javax.imageio.*;
 import javax.swing.*;
 import static texasholdem.GUI.*;
 
