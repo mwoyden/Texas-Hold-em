@@ -381,6 +381,9 @@ public class GUI extends JPanel implements ActionListener {
         riverDealing = false;
     }
 
+    /**
+     * Resets the position of each card and the velocity. Also resets the card dealing flags
+     */
     public static void resetGUI() {
         int i = 0;
         for (i = 0; i < cpuX.length; i++) {
@@ -423,38 +426,4 @@ public class GUI extends JPanel implements ActionListener {
         resetRiverDealing();
     }
 
-    /*
-    public static void main(String[] args) {
-        GUI test = new GUI();
-
-        JFrame jf = new JFrame();
-        jf.setTitle("Texas Hold'em");
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //adds table and first card
-        jf.add(test);
-        jf.setSize(600, 400);
-        jf.setVisible(true);
-
-        //wait 1.5 seconds to deal the flop face down
-        try {
-            sleep(1500);
-        } catch (InterruptedException ex) {
-        }
-        setFlopDealing();
-
-        //wait 1.5 seconds to deal the turn
-        try {
-            sleep(1500);
-        } catch (InterruptedException ex) {
-        }
-        setTurnDealing();
-
-        //wait 1.5 seconds to deal the turn
-        try {
-            sleep(1500);
-        } catch (InterruptedException ex) {
-        }
-        setRiverDealing();
-    }*/
 }

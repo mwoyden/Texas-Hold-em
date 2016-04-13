@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package texasholdem;
 
 import java.util.HashMap;
@@ -10,6 +6,9 @@ import java.util.Map;
 
 public class CPU extends Person {
 
+    /**
+     * Default constructor
+     */
     public CPU() {
         chips = 0;
         bet = 0;
@@ -18,7 +17,6 @@ public class CPU extends Person {
         x = 0;
         y = 0;
         status = 0;
-        blind = 0;
         pairValue1 = 0;
         pairValue2 = 0;
         pair1 = 0;
@@ -29,7 +27,14 @@ public class CPU extends Person {
         straight = 0;
     }
 
-    public CPU(String n, int c, int xPos, int yPos, int b) {
+    /**
+     * Alternate constructor (used)
+     * @param n name 
+     * @param c chip count
+     * @param xPos x position
+     * @param yPos y position
+     */
+    public CPU(String n, int c, int xPos, int yPos) {
         name = n;
         chips = c;
         bet = 0;
@@ -38,7 +43,6 @@ public class CPU extends Person {
         x = xPos;
         y = yPos;
         status = 1;
-        blind = b;
         pairValue1 = 0;
         pairValue2 = 0;
         pair1 = 0;
@@ -49,6 +53,9 @@ public class CPU extends Person {
         straight = 0;
     }
 
+    /**
+     *Resets all the hand control variables
+     */
     @Override
     public void fold() {
         super.fold();
@@ -62,6 +69,13 @@ public class CPU extends Person {
         straight = 0;
     }
 
+    /**
+     * Allows the CPU to call the current bet
+     * @param round which round of betting
+     * @param currentBet the bet they have to call
+     * @param board not used
+     * @return the new call bet
+     */
     @Override
     public boolean call(int round, int currentBet, Card[] board) {
         boolean ret = false;
@@ -77,26 +91,35 @@ public class CPU extends Person {
         return ret;
     }
 
+    /**
+     * Controls the CPUs betting cycle
+     * @param round current round of betting
+     * @param currentBet the current bet
+     * @param board the board
+     * @param i the CPU index in players[]
+     * @param smallBlind index of small blind
+     * @param bigBlind index of big blind
+     * @return returns the bet
+     */
     @Override
     public int decide(int round, int currentBet, Card[] board, int i, int smallBlind, int bigBlind) {
-        if (currentBet > chips) {
+        if (currentBet > chips) { //If the CPU doesn't have enough chips
             System.out.println("TOO FEW CHIPS FOLD");
             fold();
             return 0;
         }
         int ret = 0;
         raise = 0;
-        if (i == smallBlind && round == 1) {
+        if (i == smallBlind && round == 1) { //If CPU needs to call as small blind
             currentBet = 50;
-            System.out.println("PLAYING AS SMALL BLIND");
         }
-        if (i == bigBlind && round == 1) {
+        if (i == bigBlind && round == 1) { //if CPU needs to call as big blind
             currentBet = 0;
-            System.out.println("PLAYING AS BIG BLIND");
         }
+        //Decide based on which round of betting
         switch (round) {
-            case 1:
-                if (preFlop()) {
+            case 1: //Before the flop
+                if (preFlop()) { //The CPU decided to play the hole
                     ret = currentBet + raise;
                     printCards();
                 } else {
@@ -104,8 +127,8 @@ public class CPU extends Person {
                     fold();
                 }
                 break;
-            case 2:
-                if (playRound(board, round, 50, 100, 50, 3, 4, 0.4)) {
+            case 2: //After the flop
+                if (playRound(board, round, 50, 100, 50, 3, 4, 0.4)) { //The CPU decided to stay after the flop
                     ret = currentBet + raise;
                     printCards();
                 } else {
@@ -113,8 +136,8 @@ public class CPU extends Person {
                     fold();
                 }
                 break;
-            case 3:
-                if (playRound(board, round, 50, 100, 50, 4, 5, 0.2)) {
+            case 3: //After the turn
+                if (playRound(board, round, 50, 100, 50, 4, 5, 0.2)) { //The CPU decided to stay after the turn
                     ret = currentBet + raise;
                     printCards();
                 } else {
@@ -122,8 +145,8 @@ public class CPU extends Person {
                     fold();
                 }
                 break;
-            case 4:
-                if (playRound(board, round, 50, 100, 50, 5, 5, 0.1)) {
+            case 4: //After the river
+                if (playRound(board, round, 50, 100, 50, 5, 5, 0.1)) { //The CPU decided to stay til the end
                     ret = currentBet + raise;
                     printCards();
                 } else {
@@ -131,7 +154,7 @@ public class CPU extends Person {
                     fold();
                 }
                 break;
-            default:
+            default: //Erro catching
                 System.out.println("DEFAULT FOLD");
                 fold();
                 break;
@@ -140,6 +163,9 @@ public class CPU extends Person {
         return ret;
     }
 
+    /**
+     * Prints the CPUs hand in the console for debugging
+     */
     public void printCards() {
         System.out.println("CARDS:");
         String s = "";
@@ -167,17 +193,46 @@ public class CPU extends Person {
         }
     }
 
+    /**
+     * CPU may decide to raise
+     * @param b maximum raise amount
+     */
     public void raise(int b) {
-        int r = (int) Math.floor(Math.random() * b + 1);
-        if (r <= chips) {
+        int r = (int) Math.floor(Math.random() * b + 1); //Decide how much to raise by
+        if (r <= chips) { //If they can afford the raise
+            if (r >= 0 && r < 10) { //Makes sure to bet in increments of 10
+                r = 10;
+            } else if (r >= 10 && r < 20) {
+                r = 20;
+            } else if (r >= 20 && r < 30) {
+                r = 30;
+            } else if (r >= 30 && r < 40) {
+                r = 40;
+            } else if (r >= 40 && r < 50) {
+                r = 50;
+            } else if (r >= 50 && r < 60) {
+                r = 60;
+            } else if (r >= 60 && r < 70) {
+                r = 70;
+            } else if (r >= 70 && r < 80) {
+                r = 80;
+            } else if (r >= 80 && r < 90) {
+                r = 90;
+            } else if (r >= 90 && r < 100) {
+                r = 100;
+            }
             double x = Math.random();
-            if (x < 0.5) {
+            if (x < 0.5) { //Chance of raise
                 raise += r;
                 System.out.println("RAISE BY " + r + "!");
             }
         }
     }
 
+    /**
+     * Starting logic for the CPU to play a hand
+     * @return true if they decide to play, false if they fold
+     */
     public boolean preFlop() {
         boolean ret = false;
         //If cards have same suit, play the flush
@@ -206,6 +261,7 @@ public class CPU extends Person {
             System.out.println("PLAYING STRAIGHT IN ROUND 1");
             ret = true;
         }
+        //Find their highest card value
         if (hole[0].value >= hole[1].value) {
             highCard = hole[0].value;
         } else {
@@ -225,6 +281,9 @@ public class CPU extends Person {
         return ret;
     }
 
+    /**
+     * Prints the CPUs current stats
+     */
     public void printInfo() {
         System.out.println("CPU INFO:");
         System.out.println("pair1 = " + pair1);
@@ -238,6 +297,10 @@ public class CPU extends Person {
         System.out.println("hand = " + hand);
     }
     
+    /**
+     * Evaluates the CPUs final hand
+     * @param board the board
+     */
     @Override
     public void evaluate(Card[] board) {
         //Finds if the board has a pair on it
@@ -249,111 +312,129 @@ public class CPU extends Person {
                 m.put(c.value, 1);
             }
         }
+        //Variables to store board pairs
         int pairB2 = 0, pairValueB2 = 0, pairB3 = 0, pairValueB3 = 0;
         System.out.println("CHECKING FOR DUPLICATES...");
         for (int y : m.keySet()) {
-            if (m.get(y) == 2) {
+            if (m.get(y) == 2) { //If there is a pair
                 pairB2 = m.get(y);
                 pairValueB2 = y;
                 System.out.println("THERE ARE " + pairB2 + " " + pairValueB2 + "s ON THE BOARD");
             }
-            if (m.get(y) == 3) {
+            if (m.get(y) == 3) { //If there is 3 of a kind
                 pairB3 = m.get(y);
                 pairValueB3 = y;
                 System.out.println("THERE ARE " + pairB3 + " " + pairValueB3 + "s ON THE BOARD");
             }
         }
         //Evaluates the CPUs final hand
-        if (hand == 1) {
-            if (pairB2 == 2 && pairValueB2 != pairValue1 && pairValueB2 != pairValue2) {
-                hand = 2;
+        if (hand == 1) { //If the CPU has a pair
+            if (pairB2 == 2 && pairValueB2 != pairValue1 && pairValueB2 != pairValue2) { //If the board has a pair
+                hand = 2; //CPUs hand becomes 2 pair
                 System.out.println("FINAL HAND IS 2 PAIR");
-            } else if (pairB3 == 3 && pairValueB3 != pairValue1 && pairValueB3 != pairValue2) {
-                hand = 6;
+            } else if (pairB3 == 3 && pairValueB3 != pairValue1 && pairValueB3 != pairValue2) { //If the board has 3 of a kind
+                hand = 6; //CPUs hand becomes full house
                 System.out.println("FINAL HAND IS A FULL HOUSE");
-            } else {
+            } else { //If the board was pairless
                 System.out.println("FINAL HAND IS A PAIR");
             }
         }
-        if (hand == 3) {
-            if (pairB2 == 2 && pairValueB2 != pairValue1 && pairValueB2 != pairValue2) {
-                hand = 6;
+        if (hand == 3) { //If CPU has 3 of a kind
+            if (pairB2 == 2 && pairValueB2 != pairValue1 && pairValueB2 != pairValue2) { //If the board has a pair
+                hand = 6; //CPUs hand becomes full house
                 System.out.println("FINAL HAND IS A FULL HOUSE");
             }
         }
-        if (straight == 5 && flush == 5) {
-            hand = 8;
+        if (straight == 5 && flush == 5) { //If the CPU has a straight and a flush
+            hand = 8; //Hand is a straight flush
             System.out.println("FINAL HAND IS A STRAIGHT FLUSH");
-            if (true) {
-                hand = 9;
+            if (true) { //If the straight is 10 through Ace
+                hand = 9; //Hand is a royal flush
                 System.out.println("ROYAL FLUSH BRO!!!!!");
             }
         }
     }
 
+    /**
+     * Decision to play every round after the flop
+     * @param board the board
+     * @param round the round of betting
+     * @param raise2pair maximum raise value for having 2 pair
+     * @param raiseFlush maximum raise value for having a flush
+     * @param raiseStraight .. a straight
+     * @param ifFlush the minimum cards in a flush a CPU must have to play
+     * @param ifStraight the minimum cards in a straight a CPU must have to play
+     * @param bluff bluff chance for this round
+     * @return true if the CPU will play, false if they fold
+     */
     public boolean playRound(Card[] board, int round, int raise2pair, int raiseFlush, int raiseStraight, int ifFlush, int ifStraight, double bluff) {
-        boolean ret = false;
-        if (checkPair(board, round)) {
-            if ((pair1 == 2 && pair2 == 0) || (pair1 == 0 && pair2 == 2) && hand <= 1) {
+        boolean ret = false; //Initialize return variable to false
+        if (checkPair(board, round)) { //Check all pair possibilities
+            if ((pair1 == 2 && pair2 == 0) || (pair1 == 0 && pair2 == 2) && hand <= 1) { //If CPU has only 1 pair
                 System.out.println("PLAYING 1 PAIR IN ROUND " + round);
-                hand = 1;
+                hand = 1; //Hand is a pair
             }
-            if ((pair1 == 2 && pair2 == 2) && hand <= 2) {
+            if ((pair1 == 2 && pair2 == 2) && hand <= 2) { //If CPU has 2 pair
                 System.out.println("PLAYING 2 PAIR IN ROUND " + round);
-                hand = 2;
-                raise(raise2pair);
+                hand = 2; //Hand is 2 pair
+                raise(raise2pair); //Raise with a change
             }
-            if (((pair1 == 3 && pair2 == 0) || (pair1 == 0 && pair2 == 3)) && hand <= 3) {
+            if (((pair1 == 3 && pair2 == 0) || (pair1 == 0 && pair2 == 3)) && hand <= 3) { //IF CPU has 3 of a kind
                 System.out.println("PLAYING 3 OF A KIND IN ROUND " + round);
-                hand = 3;
-                raise(2 * raise2pair);
+                hand = 3; //Hand is 3 of a kind
+                raise(2 * raise2pair); //Raise chance with higher maximum raise value
             }
-            if (((pair1 == 3 && pair2 == 2) || (pair1 == 2 && pair2 == 3)) && hand <= 6) {
+            if (((pair1 == 3 && pair2 == 2) || (pair1 == 2 && pair2 == 3)) && hand <= 6) { //If the CPU has a full house (pretty sure this can't be reached)
                 System.out.println("PLAYING FULL HOUSE IN ROUND " + round);
-                hand = 6;
-                raise(3 * raise2pair);
+                hand = 6; //Hand is a full house
+                raise(3 * raise2pair); //Raise with a higher ceiling
             }
-            if (((pair1 == 4 && pair2 == 0) || (pair1 == 0 && pair2 == 4)) && hand <= 7) {
+            if (((pair1 == 4 && pair2 == 0) || (pair1 == 0 && pair2 == 4)) && hand <= 7) { //If the CPU has 4 of a kind
                 System.out.println("PLAYING 4 OF A KIND IN ROUND " + round);
-                hand = 7;
-                raise(4 * raise2pair);
+                hand = 7; //Hand is 4 of a kind
+                raise(4 * raise2pair); //Raise with highest ceiling
             }
-            ret = true;
+            ret = true; //Play the hand
         }
-        checkStraight(board, round);
-        if (straight >= ifStraight) {
-            ret = true;
+        checkStraight(board, round); //Check all straight possibilites
+        if (straight >= ifStraight) { //If the CPU has the required cards in a row for a straight in this round
+            ret = true; //play the hand
             System.out.println("PLAYING STRAIGHT IN ROUND " + round);
-            if (straight >= ifStraight + 1) {
-                raise(raiseStraight);
+            if (straight >= ifStraight + 1) { //If the CPU has more than the expected straight values
+                raise(raiseStraight); //Possibly raise
             }
-            if (straight >= 5 && hand <= 4) {
+            if (straight >= 5 && hand <= 4) { //If the CPU completed the straight
                 System.out.println("HAND IS A STRAIGHT");
-                hand = 4;
+                hand = 4; //Hand is a straight
             }
         }
-        checkFlush(board, round);
-        if (flush >= ifFlush) {
-            ret = true;
+        checkFlush(board, round); //Check for a flush
+        if (flush >= ifFlush) { //If the CPU has the required cards for a flush in this round
+            ret = true; //play the flush
             System.out.println("PLAYING FLUSH IN ROUND " + round);
-            if (flush >= ifFlush + 1) {
-                raise(raiseFlush);
+            if (flush >= ifFlush + 1) { //I the CPU has more than the expected flush values
+                raise(raiseFlush); //Possibly raise
             }
-            if (flush >= 5 && hand <= 5) {
+            if (flush >= 5 && hand <= 5) { //If the CPU has a flush
                 System.out.println("HAND IS A FLUSH");
-                hand = 5;
+                hand = 5; //Hand is a flush
             }
         }
         double x = Math.random();
-        if (x < bluff && ret == false) {
+        if (x < bluff && ret == false) { //Chance of bluffing
             System.out.println("BLUFF IN ROUND " + round);
             ret = true;
         }
-        printInfo();
-
+        printInfo(); //Print CPU evaluated values for debugging
         return ret;
     }
 
+    /**
+     * Checks for a straight
+     * @param board the board
+     * @param round the round of betting
+     * @return 
+     */
     public boolean checkStraight(Card[] board, int round) {
         boolean ret = false;
         int i = 0;
@@ -367,48 +448,60 @@ public class CPU extends Person {
         return ret;
     }
 
+    /**
+     * Checks for a flush
+     * @param board the board
+     * @param round the round of betting
+     * @return 
+     */
     public boolean checkFlush(Card[] board, int round) {
-        boolean ret = false;
+        boolean ret = false; //Initialize return variable
         int i = 0;
-        if (round < 3) {
-            for (Card c : board) {
-                if (hole[0].suit == c.suit || hole[1].suit == c.suit) {
-                    if (flush == 0) {
-                        flush = 2;
-                        highSuit = c.suit;
-                    } else if (c.suit == highSuit) {
-                        flush++;
+        if (round < 3) { //If the round is the flop
+            for (Card c : board) { //For each card in the flop
+                if (hole[0].suit == c.suit || hole[1].suit == c.suit) { //If they match the cards in the hole
+                    if (flush == 0) { //If the hole didn't match
+                        flush = 2; //The flush is set to 2 for the first card that matches
+                        highSuit = c.suit; //And the suit is set 
+                    } else if (c.suit == highSuit) { //If the flush matches the hole suit
+                        flush++; 
                     }
-                    if (flush >= 3) {
-                        ret = true;
+                    if (flush >= 3) { //If the flush after the flop has at least 3 cards
+                        ret = true; //play the flush
                     }
                 }
                 i++;
-                if (i > round) {
+                if (i > round) { //Makes sure the for loop doesn't read null cards
                     break;
                 }
             }
-        } else if (round >= 3) {
-            if (hole[0].suit == board[round].suit || hole[1].suit == board[round].suit) {
-                if (flush == 0) {
-                    flush = 2;
-                    highSuit = board[round].suit;
-                } else if (board[round].suit == highSuit) {
+        } else if (round >= 3) { //If the round is the turn or the river
+            if (hole[0].suit == board[round].suit || hole[1].suit == board[round].suit) { //Check the newly dealt card for a flush
+                if (flush == 0) { //If the flush is still 0
+                    flush = 2; //Set the flush to 2
+                    highSuit = board[round].suit; //and set the suit
+                } else if (board[round].suit == highSuit) { //If this continues a flush
                     flush++;
                 }
-                if (flush >= 4) {
-                    ret = true;
+                if (flush >= 4) { //If the flush has 4 or more cards.. even if its the river
+                    ret = true; //play the flush
                 }
             }
         }
         return ret;
     }
 
+    /**
+     * Check all pair possibilities
+     * @param board the board
+     * @param round the round of betting
+     * @return true if there is a pair, false otherwise
+     */
     public boolean checkPair(Card[] board, int round) {
-        boolean ret = false;
+        boolean ret = false; //Initialize return variable
         int i = 0;
-        if (pair1 >= 2 || pair2 >= 2) {
-            ret = true;
+        if (pair1 >= 2 || pair2 >= 2) { //If there is already a pair
+            ret = true; //Play the existing pair
         }
         if (round < 3) { // on the flop
             for (Card c : board) { // for the 3 cards in the flop
@@ -417,49 +510,47 @@ public class CPU extends Person {
                         pair1++;
                         ret = true;
                     } else if (pair1 == 0) { //no pair in hole, looking for 2 pair
-                        if (hole[0].value == c.value) {
-                            if (pair1 == 0) {
+                        if (hole[0].value == c.value) { //look for first pair
+                            if (pair1 == 0) { //If there is a pair between the hole and the board
                                 pair1 = 2;
                                 pairValue1 = c.value;
-                            } else {
+                            } else { //If this makes 3 of a kind
                                 pair1++;
                             }
                             ret = true;
                         }
-                        if (hole[1].value == c.value) {
-                            if (pair2 == 0) {
+                        if (hole[1].value == c.value) { //Check for second pair
+                            if (pair2 == 0) { //If there is a pair between the second hole card and the board
                                 pair2 = 2;
                                 pairValue2 = c.value;
                             } else {
-                                pair2++;
+                                pair2++; //If there is a 3 of a kind with the second hole card
                             }
                             ret = true;
                         }
                     }
                 }
                 i++;
-                if (i > round) {
+                if (i > round) { //Makes sure the loop doesn't read null cards
                     break;
                 }
             }
-        } else if (round >= 3) {
-            System.out.println("PAIR CHECK IN ROUND: " + round);
-            System.out.println("CARD VALUE: " + board[round].value);
-            if (hole[0].value == board[round].value /*|| hole[1].value == board[round].value*/) { // NULL POINTER SOMETIMES
-                if (hole[0].value == pairValue1) {
+        } else if (round >= 3) { //If the round is the turn of the river
+            if (hole[0].value == board[round].value) { //If the newly dealt card matches a card in the hole
+                if (hole[0].value == pairValue1) { //If it makes 3+ of a kind 
                     pair1++;
                     ret = true;
-                } else {
+                } else { //If this makes a new pair
                     pair1 = 2;
                     pairValue1 = hole[0].value;
                     ret = true;
                 }
             }
-            if (hole[1].value == board[round].value) {
-                if (hole[1].value == pairValue2) {
+            if (hole[1].value == board[round].value) { //If the newly dealt card matches the second card in the hole
+                if (hole[1].value == pairValue2) { //If it makes 3+ or a kind
                     pair2++;
                     ret = true;
-                } else {
+                } else { //If this makes a new pair
                     pair2 = 2;
                     pairValue2 = hole[1].value;
                     ret = true;

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package texasholdem;
 
 import java.util.*;
@@ -37,11 +33,6 @@ public class TexasHoldem extends JPanel {
     private static final int NUM_PLAYERS = 5;
     private static final int SB_BET = 50, BB_BET = 100;
 
-    //GUI control variables
-    public static int flag;
-    public static boolean dealt, flopped, turnt, rivered;
-    public static boolean[] bets = new boolean[NUM_PLAYERS];
-
     //Deck Map is used to map values in program to sprites in the GUI
     private static final String dir = System.getProperty("user.dir") + "/src/texasholdem/sprites/";
     public static final String[] DECK_MAP = new String[]{
@@ -72,6 +63,10 @@ public class TexasHoldem extends JPanel {
         dir + "queen_clubs.jpg", dir + "queen_spades.jpg", dir + "queen_hearts.jpg", dir + "queen_diamonds.jpg",
         dir + "king_clubs.jpg", dir + "king_spades.jpg", dir + "king_hearts.jpg", dir + "king_diamonds.jpg"};
 
+    /**
+     * Main
+     * @param args 
+     */
     public static void main(String[] args) {
         init();
         /*
@@ -86,7 +81,6 @@ public class TexasHoldem extends JPanel {
 
     /**
      * Sleeps the GUI animation
-     *
      * @param time in ms for GUI to sleep
      */
     public static void sleepGUI(int time) {
@@ -101,48 +95,32 @@ public class TexasHoldem extends JPanel {
      * flop, turn, river, and game control
      */
     public static void play() {
-        round = 1;
-        initGUI();
-        while (true) {
+        round = 1; //Set the round to pre-flop
+        while (true) { //Loop until the game exits
             System.out.println("ROUND: " + round);
             switch (round) {
-                case 1:
-                    deal();
+                case 1: //Before the flop
+                    deal(); //Deal the hole
                     placeBets();
                     break;
-                case 2:
-                    flop();
+                case 2: //After the flop
+                    flop(); //Deal the flop
                     placeBets();
                     break;
-                case 3:
-                    turn();
+                case 3: //The turn
+                    turn(); //Deal the turn
                     placeBets();
                     break;
-                case 4:
-                    river();
-                    //initGUI();
+                case 4: //The river
+                    river(); //Deal the river
                     placeBets();
-                    checkWinner();
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(TexasHoldem.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //initGUI();
-                    //return;
+                    checkWinner(); //Award the pot to the highest hand
                     break;
-
-                default:
+                default: //Error catching
                     reset();
                     break;
             }
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(TexasHoldem.class.getName()).log(Level.SEVERE, null, ex);
-            }
             round++;
-
         }
     }
 
@@ -165,8 +143,8 @@ public class TexasHoldem extends JPanel {
         //Finds if there is a tie
         Set<Integer> dups = new HashSet();
         for (int h : hands) {
-            if (dups.contains(h)) {
-                winners++;
+            if (dups.contains(h)) { //If there is a duplicate
+                winners++; //Increment the amount of dinners
             }
             dups.add(h);
         }
@@ -182,28 +160,27 @@ public class TexasHoldem extends JPanel {
         if (winners == 1) {
             awardPot(winner); //Doesn't account for the players hand
         } else {
-            for (i = 0; i < NUM_PLAYERS; i++) {
+            for (i = 0; i < NUM_PLAYERS; i++) { //Removes all players who lost
                 if (players[i].hand < max) {
                     players[i].status = 0;
                 }
             }
             int high = 0;
-            for (i = 0; i < NUM_PLAYERS; i++) {
+            for (i = 0; i < NUM_PLAYERS; i++) { //Finds the highcard
                 if (players[i].status == 1) {
                     if (players[i].highCard > high) {
                         high = players[i].highCard;
-                        winner = i;
+                        winner = i; //Sets the winner 
                     }
                 }
             }
-            awardPot(winner);
+            awardPot(winner); 
         }
     }
 
     /**
      * Called by placeBets(), checks to see if there is a winner before the game
      * has concluded all of the rounds of betting
-     *
      * @return true it there is one player left, false otherwise
      */
     public static boolean checkPlayers() {
@@ -239,21 +216,12 @@ public class TexasHoldem extends JPanel {
     public static void reset() {
         System.out.println("RESETTING CARDS...");
         round = 0;
-        smallBlind = (smallBlind + 1) % NUM_PLAYERS;
-        bigBlind = (bigBlind + 1) % NUM_PLAYERS;
-        pot = 0;
-        dealt = flopped = turnt = rivered = false;
+        smallBlind = (smallBlind + 1) % NUM_PLAYERS; //Rotate small blind
+        bigBlind = (bigBlind + 1) % NUM_PLAYERS; //Rotate big blind
+        pot = 0; //Reset the pot to 0
         resetGUI();
-        resetFlags();
         resetPlayers();
         resetDeck();
-    }
-
-    public static void resetFlags() {
-        for (int i = 0; i < NUM_PLAYERS; i++) {
-            bets[i] = false;
-        }
-        flag = 0;
     }
 
     /**
@@ -264,12 +232,15 @@ public class TexasHoldem extends JPanel {
         System.out.println("RESETTING PLAYERS...");
         for (Person p : players) {
             if (p.chips > 0) {
-                p.fold();
-                p.status = 1;
+                p.fold(); //Ensures all hand related variables are zeroed
+                p.status = 1; //Puts the players in the game
             }
         }
     }
 
+    /**
+     * Collects the cards
+     */
     public static void resetDeck() {
         System.out.println("RESETTING DECK...");
         int i = 0;
@@ -278,134 +249,137 @@ public class TexasHoldem extends JPanel {
         }
     }
 
+    /**
+     * Deals the flop and signals GUI
+     */
     public static void flop() {
         System.out.println("FLOP...");
         int i = 0;
-        board = new Card[5];
-        while (i < 3) {
+        board = new Card[5]; //Create the board
+        while (i < 3) { //Deal 3 cards
             board[i] = new Card();
             board[i] = draw();
             i++;
         }
-        System.out.println("FLAG: " + flag);
-        if (flag == 5) {
-            setFlopDealing();
-        }
-        resetFlags();
+        setFlopDealing(); //Signal the GUI
         printBoard(2);
     }
 
+    /**
+     * Deals the turn and signals the GUI
+     */
     public static void turn() {
         System.out.println("TURN...");
         board[3] = new Card();
         board[3] = draw();
-        System.out.println("FLAG: " + flag);
-        if (flag == 5) {
-            setTurnDealing();
-        }
-        resetFlags();
+        setTurnDealing();
         printBoard(3);
     }
 
+    /**
+     * Deals the river and signals the GUI
+     */
     public static void river() {
         System.out.println("RIVER...");
         board[4] = new Card();
         board[4] = draw();
-        System.out.println("FLAG: " + flag);
-        if (flag == 5) {
-            setRiverDealing();
-        }
-        resetFlags();
+        setRiverDealing();
         printBoard(4);
     }
 
+    /**
+     * Allows all players to bet and handles a lot of CPU betting logic
+     */
     public static void placeBets() {
         System.out.println("PLACING BETS IN ROUND: " + round);
-        currentBet = BB_BET;
-        int oldBet = currentBet, i = smallBlind, j = 0;
-        String s = "";
+        currentBet = BB_BET; //Set the minumum bet to the BB_BET (100)
+        int i = smallBlind, j = 0; 
+        String s = ""; //String used to waitCPU steps
         while (j < NUM_PLAYERS) { //make sure each player goes
-            System.out.println("FLAG: " + flag);
-            if (j == 0) {
+            if (j == 0) { //Accomodates small blind
                 currentBet = 0;
             }
-            if (currentBet < BB_BET && round == 1) {
+            if (currentBet < BB_BET && round == 1) { //Makes sure players after BB bet the BB_BET
                 currentBet = BB_BET;
             }
-            if (players[i].status != 0) {
-                if (players[i].name.equals("Player")) {
-                    //turn();
-                    players[i].status = 0;
-                    System.out.println("Player betting...");
-                    bets[i] = true;
-                } else if (players[i].name.contains("CPU")) {
+            if (players[i].status != 0) { //If the person has not folded
+                if (players[i].name.equals("Player")) { //If the person is the player
+                    //turn(); //Take your turn to decide
+                    players[i].status = 0; //folds the player for CPU simulation
+                    System.out.println("Player betting..."); 
+                } else if (players[i].name.contains("CPU")) { //If the person is the CPU
                     s = "CPU " + i + " BETTING...";
-                    waitCPU(bets, i, s);
+                    waitCPU(i, s);
                     if ((currentBet = players[i].decide(round, currentBet, board, i, smallBlind, bigBlind)) == 0) { //CPU folded or checked
                         if (i == bigBlind && round == 1 && players[i].status == 1) { //If big blind checks in round 1
                             s = "BIG BLIND (CPU " + i + ") CHECKED";
-                            waitCPU(bets, i, s);
-                            players[i].bet += BB_BET;
-                            pot += currentBet;
+                            waitCPU(i, s);
+                            players[i].bet += BB_BET; //Error handles the big blind from calling later on
+                            pot += currentBet; //Adds the bet to the pot
                         }
-                        if (players[i].status == 1) {
+                        if (players[i].status == 1) { //If CPU checks
                             s = "CPU " + i + " CHECKED";
-                            waitCPU(bets, i, s);
-                        } else {
+                            waitCPU(i, s);
+                        } else { //If CPU folded
                             s = "CPU " + i + " FOLDED";
-                            waitCPU(bets, i, s);
-                            if (i == smallBlind && round == 1) {
+                            waitCPU(i, s);
+                            if (i == smallBlind && round == 1) { //Reset the bet the BB_BET
                                 currentBet = BB_BET;
                             }
-                        }
-                    } else {
+                        } 
+                    } else { //If CPU bets in first round or raises
                         s = "CPU " + i + " BET " + currentBet;
-                        waitCPU(bets, i, s);
+                        waitCPU(i, s);
                         if (i == smallBlind && round == 1) { //make sure small blind doesnt double call
                             players[i].bet += SB_BET;
                         }
-                        pot += currentBet;
+                        pot += currentBet; //Adds the bet to the pot
                     }
                     s = "DONE";
-                    waitCPU(bets, i, s);
+                    waitCPU(i, s);
                 }
             }
-            flag++;
-            if (checkPlayers()) {
+            if (checkPlayers()) { //If everyone folded
                 return;
             }
-            i = (i + 1) % NUM_PLAYERS;
+            i = (i + 1) % NUM_PLAYERS; //Circle around the table
             j++;
         }
         j = 0;
-        i = smallBlind;
-        while (j < NUM_PLAYERS) {
-            if (players[i].status != 0) {
-                if (players[i].bet < currentBet) {
-                    if (players[i].call(round, currentBet, board)) {
+        i = smallBlind; 
+        while (j < NUM_PLAYERS) { //For each player
+            if (players[i].status != 0) { //If they haven't folded
+                if (players[i].bet < currentBet) { //If there was a raise on the table
+                    if (players[i].call(round, currentBet, board)) { //CPU decides to call
                         System.out.println("CPU " + i + " CALLED");
-                        pot -= players[i].bet;
-                        pot += currentBet;
+                        pot -= players[i].bet; //CPU retracts bet
+                        pot += currentBet; //CPU adds new bet -- this isn't how poker works, but the logic works in the program
                     }
                 }
             }
-            i = (i + 1) % NUM_PLAYERS;
+            i = (i + 1) % NUM_PLAYERS; //Circle around the table
             j++;
         }
         System.out.println(pot);
     }
 
-    public static void waitCPU(boolean bets[], int i, String s) {
-        if (s.equalsIgnoreCase("DONE")) {
-            bets[i] = true; // NOT CURRENTLY BEING USED
-        }
-        System.out.println(s);
+    /**
+     * Used to postpone CPUs actions to line up with GUI
+     * @param i which CPU is waiting
+     * @param s string indicates what step the CPU is at in placeBets()
+     */
+    public static void waitCPU(int i, String s) {
+        System.out.println(s); //Prints the step
         try {
             sleep(600);
         } catch (InterruptedException ex) {
         }
     }
 
+    /**
+     * Prints out the cards on the board
+     * @param round specifies how many cards to try and print
+     */
     public static void printBoard(int round) {
         System.out.println("BOARD:");
         String s = "";
@@ -433,30 +407,33 @@ public class TexasHoldem extends JPanel {
         }
     }
 
+    /**
+     * Deals the hole and forces SB and BB bets
+     */
     public static void deal() {
         int i = 0;
         Random rand = new Random();
         System.out.println("DEALING...");
-        while (i < NUM_PLAYERS) {
+        while (i < NUM_PLAYERS) { //For each player
             if (i == smallBlind) { //If the player being dealt is the small blind
-                if (players[i].name.contains("CPU")) {
+                if (players[i].name.contains("CPU")) { //If players is CPU
                     System.out.println("CPU " + i + " BET SB: " + SB_BET);
-                } else {
+                } else { //If player is you
                     System.out.println("Player BET SB: " + SB_BET);
                 }
                 pot += SB_BET; //add the small blind to the pot
                 players[i].bet(SB_BET); //small blind bets SB_BET value
             }
             if (i == bigBlind) { //If the player being dealt is the big blind
-                if (players[i].name.contains("CPU")) {
+                if (players[i].name.contains("CPU")) { //If player is CPU
                     System.out.println("CPU " + i + " BET BB: " + BB_BET);
-                } else {
+                } else { //If player is you
                     System.out.println("Player BET BB: " + BB_BET);
                 }
                 pot += BB_BET; //add the big blind to the pot
                 players[i].bet(BB_BET); //big blind bets BB_BET value
             }
-            players[i].hole[0] = draw();
+            players[i].hole[0] = draw(); //Deal the hole
             players[i].hole[1] = draw();
             System.out.println(players[i].hole[0].id + " " + players[i].hole[1].id);
             i++;
@@ -470,17 +447,17 @@ public class TexasHoldem extends JPanel {
      * @return the card that was taken from the deck
      */
     public static Card draw() {
-        Random rand = new Random();
-        int card = rand.nextInt(DECK_LENGTH);
-        while (deck[card].dealt) {
+        Random rand = new Random(); //Random number object
+        int card = rand.nextInt(DECK_LENGTH); //Creates a number from 0-103
+        while (deck[card].dealt) { //Makes sure it doesn't deal the same card twice
             card = rand.nextInt(DECK_LENGTH);
         }
-        deck[card].dealt = true;
-        return deck[card];
+        deck[card].dealt = true; //Sets card to dealt
+        return deck[card]; //Returns the card object
     }
 
     /**
-     * Initializes the GUI frame and handles card animation
+     * Initializes the GUI frame
      */
     public static void initGUI() {
         test = new GUI();
@@ -495,7 +472,7 @@ public class TexasHoldem extends JPanel {
         jf.setVisible(true);
 
         //wait 1.5 seconds to deal the flop face down
-        sleepGUI(3000);
+        sleepGUI(1000);
         //setFlopDealing();
 
         //wait 1.5 seconds to deal the turn
@@ -511,9 +488,7 @@ public class TexasHoldem extends JPanel {
      */
     public static void init() {
         System.out.println("INITIALIZING GAME...");
-        game = new TexasHoldem();
-        //initGUI();
-
+        game = new TexasHoldem(); //Calls constructor
     }
 
     /**
@@ -523,14 +498,14 @@ public class TexasHoldem extends JPanel {
      */
     public static void initPlayers(int chips) {
         System.out.println("INITIALIZING PLAYERS...");
-        //players[0] = new Dealer();
-        players[0] = new CPU("CPU 0", chips, 1, 1, 1);
-        players[1] = new CPU("CPU 1", chips, 2, 2, 2);
-        players[2] = new Player("Player", chips, 0, 0, 0);
-        players[3] = new CPU("CPU 3", chips, 3, 3, 0);
-        players[4] = new CPU("CPU 4", chips, 4, 4, 0);
-        smallBlind = 0;
-        bigBlind = 1;
+        players = new Person[NUM_PLAYERS]; //Initializes the players
+        players[0] = new CPU("CPU 0", chips, 1, 1); //Args are name, chip count, xpos, ypos
+        players[1] = new CPU("CPU 1", chips, 2, 2);
+        players[2] = new Player("Player", chips, 0, 0);
+        players[3] = new CPU("CPU 3", chips, 3, 3);
+        players[4] = new CPU("CPU 4", chips, 4, 4);
+        smallBlind = 0; //CPU 0 starts as small blind
+        bigBlind = 1; //CPU 1 starts as big blind
     }
 
     /**
@@ -539,15 +514,15 @@ public class TexasHoldem extends JPanel {
      */
     public static void initDeck() {
         System.out.println("INITIALIZING DECK...");
-        deck = new Card[DECK_LENGTH];
-        int i, s = 0, v = 1;
-        for (i = 0; i < DECK_LENGTH; i++) {
-            if (i % 52 == 0) {
+        deck = new Card[DECK_LENGTH]; //Create the deck object
+        int i, s = 0, v = 1; //loop variable (also id), suit, card value
+        for (i = 0; i < DECK_LENGTH; i++) { //Loops through the deck and creates each card
+            if (i % 52 == 0) { //Reset value to Ace for second 52 cards
                 v = 1;
             }
-            deck[i] = new Card(i, s, v);
-            s = (i + 1) % 4;
-            if (s == 0) {
+            deck[i] = new Card(i, s, v); //Create the card with the id, suit, and value
+            s = (i + 1) % 4; //Resets the suit
+            if (s == 0) { //Increments the card value once each card of that suit is created
                 v++;
             }
         }
@@ -557,8 +532,8 @@ public class TexasHoldem extends JPanel {
      * Constructor called by init(), initializes the deck and the players
      */
     public TexasHoldem() {
-        players = new Person[NUM_PLAYERS];
         initPlayers(10000);
         initDeck();
+        initGUI();
     }
 }
