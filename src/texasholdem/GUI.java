@@ -34,7 +34,6 @@ public class GUI extends JPanel implements ActionListener {
     static boolean flopDealing = false;
     static boolean turnDealing = false;
     static boolean riverDealing = false;
-    int x, y, xv, yv, xpo, ypo;
 
     /* EXTRA DECKS */
     int[] extraX = {STARTING_X, STARTING_X + 2, STARTING_X + 4};

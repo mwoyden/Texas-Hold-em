@@ -503,18 +503,18 @@ public class TexasHoldem extends JFrame {
         gui = new GUI();
         jf = new JFrame();
 
-        /*
+        ///*
         final JPanel panel = (JPanel) jf.getGlassPane();
         final JButton play = new JButton("Play");
         play.setLayout(null);
         panel.setLayout(null);
         play.setBounds(330, 300, 59, 25);
         panel.setBounds(330, 300, 60, 25);
-         */
+        // */
         //adds table and deck spirte
         jf.add(gui);
 
-        /*
+        ///*
         panel.setVisible(true);
         //panel.setLayout(new GridBagLayout());
         panel.add(play);
@@ -533,7 +533,7 @@ public class TexasHoldem extends JFrame {
             }
         });
         play.setLocation(330, 300);
-         */
+         //*/
         jf.setTitle("Texas Hold'em");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(FRAME_WIDTH, FRAME_HEIGHT);
