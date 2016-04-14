@@ -20,8 +20,8 @@ import static texasholdem.TexasHoldem.*;
 public class GUI extends JPanel implements ActionListener {
 
     private static final int NUM_CPUS = 4;
-    private static final int STARTING_X = 385;
-    private static final int STARTING_Y = 10;
+    private static final int STARTING_X = 455;
+    private static final int STARTING_Y = 100;
     private static final int VELOCITY = 3;
     public static BufferedImage image1;
 
@@ -67,7 +67,7 @@ public class GUI extends JPanel implements ActionListener {
     /* RIVER'S GLOBAL VARIABLE*/
     static int riverX = STARTING_X;
     static int riverY = STARTING_Y;
-    static int riverXVel = -VELOCITY;
+    static int riverXVel = VELOCITY;
     static int riverYVel = VELOCITY;
 
     int j = 0, k = 0;
@@ -76,10 +76,10 @@ public class GUI extends JPanel implements ActionListener {
     public void createTable(Graphics g) {
         /* DEFAULT JFRAME SIZE IS 385 X 600*/
 
-        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/table3.jpg";
+        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/table6.jpg";
         i = new ImageIcon(path);
         image = i.getImage();
-        g.drawImage(image, 0, 0, /*WIDTH*/ 600, /*HEIGHT*/ 385, this);
+        g.drawImage(image, 0, 0, /*WIDTH*/ FRAME_WIDTH, /*HEIGHT*/ FRAME_HEIGHT, this);
     }
 
     public void dealCPU(Graphics g) {
@@ -188,7 +188,7 @@ public class GUI extends JPanel implements ActionListener {
             dealCPU(g);
         }
 
-        //deals three cards face down for the flop
+        //deals three cards face up for the flop
         if (flopDealing) {
             dealFlop(g, DECK_MAP[board[0].id], DECK_MAP[board[1].id], DECK_MAP[board[2].id]);
         }
@@ -215,27 +215,28 @@ public class GUI extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         //positions for each cpu
-        int posX[] = {500, 480, 40, 30};
-        int posY[] = {60, 250, 250, 60};
-        int posX2[] = {520, 500, 60, 50};
-        int posY2[] = {80, 270, 270, 80};
+        int posX[] = {640, 620, 100, 80};
+        int posY[] = {110, 320, 320, 110};
+        int posX2[] = {660, 640, 120, 100};
+        int posY2[] = {130, 355, 340, 130};
 
         //positions for the player
-        int playerPosX = 270;
-        int playerPosY = 280;
+        int playerPosX = 370;
+        int playerPosY = 400;
         int increment = 20;
 
         //positions for the flop
-        int flopPosX = 147;
-        int flopPosY = 150;
+        int flopPosX = 247;
+        int flopPosY = 270;
         int flopIncrement = 60;
 
         //positions for the turn
         int turnPosX = flopPosX + (flopIncrement * 3);
         int turnPosY = flopPosY;
 
+        /*(240) + (flopIncrement * 4);*/
         //positions for the river
-        int riverPosX = 150 + (flopIncrement * 4);
+        int riverPosX =  483;
         int riverPosY = flopPosY;
 
         if (cpuDealing) {
@@ -334,7 +335,7 @@ public class GUI extends JPanel implements ActionListener {
 
         //deals with the river
         if (riverDealing) {
-            if (riverX < riverPosX) {
+            if (riverX > riverPosX) {
                 riverXVel = 0;
             }
 

@@ -24,7 +24,7 @@ public class TexasHoldem extends JFrame {
 
     //Final variables
     private static final int DECK_LENGTH = 104;
-    private static final int FRAME_WIDTH = 600, FRAME_HEIGHT = 400;
+    public static final int FRAME_WIDTH = 800, FRAME_HEIGHT = 600;
     private static final int NUM_PLAYERS = 5;
     private static final int SB_BET = 50, BB_BET = 100;
 
@@ -517,7 +517,7 @@ public class TexasHoldem extends JFrame {
         ///*
         panel.setVisible(true);
         //panel.setLayout(new GridBagLayout());
-        panel.add(play);
+        //panel.add(play);
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
