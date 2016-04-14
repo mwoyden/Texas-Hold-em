@@ -53,6 +53,10 @@ public abstract class Person {
     public boolean call(int round, int currentBet, Card[] board) {
         return false;
     }
+    
+    public void call(int currentBet) {
+        
+    }
 
     /**
      * Decides (see CPU Override)

@@ -10,9 +10,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 import static texasholdem.TexasHoldem.*;
@@ -72,7 +72,7 @@ public class GUI extends JPanel implements ActionListener {
     static int riverYVel = VELOCITY;
 
     int j = 0, k = 0;
-
+    
     //draws the table
     public void createTable(Graphics g) {
         /* DEFAULT JFRAME SIZE IS 385 X 600*/
@@ -178,13 +178,15 @@ public class GUI extends JPanel implements ActionListener {
 
         //draws the table
         createTable(g);
+        
+        if (players[2].status == 1) {
+            //deals face up cards for the player
+            dealPlayer(g, DECK_MAP[players[2].hole[0].id], DECK_MAP[players[2].hole[1].id]);
+        }
 
         if (cpuDealing) {
             //deals facedown cards for the CPU's
             dealCPU(g);
-
-            //deals face up cards for the player
-            dealPlayer(g, DECK_MAP[players[2].hole[0].id], DECK_MAP[players[2].hole[1].id]);
         }
 
         //deals three cards face down for the flop

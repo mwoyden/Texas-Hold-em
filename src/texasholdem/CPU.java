@@ -84,7 +84,7 @@ public class CPU extends Person {
             fold();
             return false;
         }
-        if (pair1 > 0 || straight > 0 || flush > 0) {
+        if (pair1 > 0 || straight > 0 || flush > 0 || pair2 > 0) {
             ret = true;
             bet(currentBet - bet);
         }
@@ -295,6 +295,7 @@ public class CPU extends Person {
         System.out.println("highCard = " + highCard);
         System.out.println("highSuit = " + highSuit);
         System.out.println("hand = " + hand);
+        System.out.println("CHIPS REMAINING: " + chips);
     }
     
     /**
