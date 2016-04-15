@@ -30,7 +30,7 @@ public class TexasHoldem extends JFrame {
     public static final int FRAME_WIDTH = 800, FRAME_HEIGHT = 600;
     private static final int NUM_PLAYERS = 5;
     private static final int SB_BET = 50, BB_BET = 100;
-    private static final int TEXT_WIDTH = 100, TEXT_HEIGHT = 25;
+    private static final int TEXT_WIDTH = 100, TEXT_HEIGHT = 30;
 
     //Deck Map is used to map values in program to sprites in the GUI
     private static final String dir = System.getProperty("user.dir") + "/src/texasholdem/sprites/";
@@ -536,7 +536,7 @@ public class TexasHoldem extends JFrame {
     }
 
     public static JLabel createText(String name, int posX, int posY, int sizeX, int sizeY) {
-        JLabel label = new JLabel(name);
+        JLabel label = new JLabel("<html>" +name + "<br> fuck</html>");
 
         //label.setLayout(null);
         label.setBounds(posX, posY, sizeX, sizeY);
@@ -561,11 +561,11 @@ public class TexasHoldem extends JFrame {
         ///*
         final JPanel panel = (JPanel) jf.getGlassPane();
         final JButton play = new JButton("Play");
-        cpu1 = createText(String.valueOf((int) players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
-        cpu2 = createText(String.valueOf((int) players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
-        player = createText(String.valueOf((int) players[2].chips), 360, 530, TEXT_WIDTH, TEXT_HEIGHT);
-        cpu3 = createText(String.valueOf((int) players[3].chips), 70, 460, TEXT_WIDTH, TEXT_HEIGHT);
-        cpu4 = createText(String.valueOf((int) players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
+        cpu1 = createText(String.valueOf(players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
+        cpu2 = createText(String.valueOf(players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
+        player = createText(String.valueOf(players[2].chips), 360, 530, TEXT_WIDTH, TEXT_HEIGHT);
+        cpu3 = createText(String.valueOf(players[3].chips), 70, 460, TEXT_WIDTH, TEXT_HEIGHT);
+        cpu4 = createText(String.valueOf(players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
 
         play.setLayout(null);
         panel.setLayout(null);
