@@ -536,6 +536,16 @@ public class TexasHoldem extends JFrame {
         return deck[card]; //Returns the card object
     }
 
+    /**
+     * Creates text
+     *
+     * @param name
+     * @param posX
+     * @param posY
+     * @param sizeX
+     * @param sizeY
+     * @return
+     */
     public static JLabel createText(String name, int posX, int posY, int sizeX, int sizeY) {
         JLabel label = new JLabel(name);
 
