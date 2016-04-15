@@ -551,7 +551,7 @@ public class TexasHoldem extends JFrame {
         /*
         panel.setVisible(true);
         //panel.setLayout(new GridBagLayout());
-        panel.add(play);
+        //panel.add(play);
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
