@@ -28,8 +28,8 @@ public abstract class Person {
      */
     public void fold() {
         bet = 0; //Reset bet
-        hole[0] = new Card();
-        hole[1] = new Card();
+        hole[0] = new Card(1, 1, 1);
+        hole[1] = new Card(1, 1, 1);
         hand = 0; //Reset hand
         status = 0; //Remove from current hand
     }

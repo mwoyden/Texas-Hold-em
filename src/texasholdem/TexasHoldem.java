@@ -147,6 +147,7 @@ public class TexasHoldem extends JFrame {
         //Finds the value of the highest hand based on logic in "person" class
         for (i = 0; i < NUM_PLAYERS; i++) {
             if (hands[i] > max) {
+                System.out.println("PLAYER " + i + "'S HAND IS " + hands[i]);
                 max = hands[i];
                 winner = i;
             }

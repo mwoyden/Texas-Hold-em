@@ -73,8 +73,6 @@ public class Player extends Person {
     @Override
     public void call(int currentBet) {
         bet(currentBet - bet);
-        System.out.println("CURRENT BET IN PLAYER CLASS: " + currentBet);
-        System.out.println("PLAYERS CURRENT BET: " + bet);
         if (currentBet == 0) {
             System.out.println("Player checks");
         }
@@ -220,17 +218,9 @@ public class Player extends Person {
     /**
      * Prints the CPUs current stats
      */
+    @Override
     public void printInfo() {
         System.out.println("PLAYER INFO:");
-        System.out.println("pair1 = " + pair1);
-        System.out.println("pairValue1 = " + pairValue1);
-        System.out.println("pair2 = " + pair2);
-        System.out.println("pairValue2 = " + pairValue2);
-        System.out.println("flush = " + flush);
-        System.out.println("straight = " + straight);
-        System.out.println("highCard = " + highCard);
-        System.out.println("highSuit = " + highSuit);
-        System.out.println("hand = " + hand);
         System.out.println("CHIPS REMAINING: " + chips);
     }
     
