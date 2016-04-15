@@ -10,6 +10,8 @@ import javax.swing.*;
 import static texasholdem.GUI.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TexasHoldem extends JFrame {
 
@@ -22,6 +24,7 @@ public class TexasHoldem extends JFrame {
     public static BufferedImage image;
     public static String path;
     public static int pot, round, currentBet, smallBlind, bigBlind;
+    public static boolean called = false, folded = false;
 
     public static JLabel cpu1, cpu2, cpu3, cpu4, player;
 
@@ -99,6 +102,8 @@ public class TexasHoldem extends JFrame {
         round = 1; //Set the round to pre-flop
         while (true) { //Loop until the game exits
             System.out.println("ROUND: " + round);
+            called = false;
+            folded = false;
             switch (round) {
                 case 1: //Before the flop
                     deal(); //Deal the hole
@@ -295,6 +300,7 @@ public class TexasHoldem extends JFrame {
      * CPUs
      */
     public static void takeTurn() {
+        /*
         Scanner console = new Scanner(System.in);
         System.out.println("PLAYER'S TURN:");
         players[2].printInfo();
@@ -318,7 +324,15 @@ public class TexasHoldem extends JFrame {
             players[2].call(currentBet);
             pot += players[2].bet;
         }
-        System.out.println("CURRENT BET AFTER PLAYERS TURN: " + currentBet);
+        */
+        while (!called && !folded) {
+            try {
+                sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TexasHoldem.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
     /**
@@ -571,17 +585,25 @@ public class TexasHoldem extends JFrame {
 
         ///*
         final JPanel panel = (JPanel) jf.getGlassPane();
-        final JButton play = new JButton("Play");
+        final JButton call = new JButton("Call");
+        final JButton fold = new JButton("Fold");
+        
         cpu1 = createText(String.valueOf(players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
         cpu2 = createText(String.valueOf(players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
         player = createText(String.valueOf(players[2].chips), 360, 530, TEXT_WIDTH, TEXT_HEIGHT);
         cpu3 = createText(String.valueOf(players[3].chips), 70, 460, TEXT_WIDTH, TEXT_HEIGHT);
         cpu4 = createText(String.valueOf(players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
 
-        play.setLayout(null);
+        //location for call and fold button
+        call.setBounds(275, 510, 59 , 25);
+        call.setLocation(275, 510);
+        fold.setBounds(275, 480, 59 , 25);
+        fold.setLocation(275, 480);
+        
+        call.setLayout(null);
         panel.setLayout(null);
 
-        panel.setBounds(330, 300, 60, 25);
+        panel.setBounds(360, 550, 60, 25);
 
         //adds table and deck spirte
         jf.add(gui);
@@ -594,24 +616,28 @@ public class TexasHoldem extends JFrame {
         panel.add(cpu3);
         panel.add(cpu4);
         panel.add(player);
+        panel.add(call);
+        panel.add(fold);
 
         //panel.setLayout(new GridBagLayout());
         //panel.add(play);
-        play.addActionListener(new ActionListener() {
+        call.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                play();
-                panel.setVisible(false);
-                panel.revalidate();
-                panel.remove(panel);
-                panel.repaint();
-                play.setVisible(false);
-                play.revalidate();
-                play.remove(panel);
-                play.repaint();
+                players[2].call(currentBet);
+                called = true;
+
             }
         });
-        play.setLocation(330, 300);
+        
+        fold.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                players[2].fold();
+                folded = true;
+            }
+        });
+        //call.setLocation(330, 300);
 
         //*/
         jf.setTitle("Texas Hold'em");
