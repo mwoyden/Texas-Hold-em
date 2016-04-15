@@ -349,11 +349,11 @@ public class GUI extends JPanel implements ActionListener {
         }
 
         //UPDATE THE CHIP COUNT OF THE CPUS/PLAYER
-        cpu1.setText("Chips: " + String.valueOf((int)players[0].chips));
-        cpu2.setText("Chips: " + String.valueOf((int)players[1].chips));
-        player.setText("Chips: " + String.valueOf((int)players[2].chips));
-        cpu3.setText("Chips: " + String.valueOf((int)players[3].chips));
-        cpu4.setText("Chips: " + String.valueOf((int)players[4].chips));
+        cpu1.setText("<html> <strong>CPU 1</strong> <br> Chips: " + String.valueOf(players[0].chips) + " </html>");
+        cpu2.setText("<html> <strong>CPU 2</strong> <br> Chips: " + String.valueOf(players[1].chips) + " </html>");
+        player.setText("<html> <strong>PLAYER</strong> <br> Chips: " + String.valueOf(players[2].chips) + " </html>");
+        cpu3.setText("<html> <strong>CPU 3</strong> <br> Chips: " + String.valueOf(players[3].chips) + " </html>");
+        cpu4.setText("<html> <strong>CPU 4</strong> <br> Chips: " + String.valueOf(players[4].chips) + " </html>");
         
         repaint(); //repaints the image every 10 milliseconds
 
@@ -427,7 +427,7 @@ public class GUI extends JPanel implements ActionListener {
 
         riverX = STARTING_X;
         riverY = STARTING_Y;
-        riverXVel = -VELOCITY;
+        riverXVel = VELOCITY;
         riverYVel = VELOCITY;
         
         resetDealing();
