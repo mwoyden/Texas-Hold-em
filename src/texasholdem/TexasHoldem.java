@@ -1,5 +1,6 @@
 package texasholdem;
 
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.util.*;
 import javax.swing.JPanel;
@@ -22,11 +23,14 @@ public class TexasHoldem extends JFrame {
     public static String path;
     public static int pot, round, currentBet, smallBlind, bigBlind;
 
+    public static JLabel cpu1, cpu2, cpu3, cpu4, player;
+
     //Final variables
     private static final int DECK_LENGTH = 104;
     public static final int FRAME_WIDTH = 800, FRAME_HEIGHT = 600;
     private static final int NUM_PLAYERS = 5;
     private static final int SB_BET = 50, BB_BET = 100;
+    private static final int TEXT_WIDTH = 100, TEXT_HEIGHT = 25;
 
     //Deck Map is used to map values in program to sprites in the GUI
     private static final String dir = System.getProperty("user.dir") + "/src/texasholdem/sprites/";
@@ -328,16 +332,16 @@ public class TexasHoldem extends JFrame {
         }
         currentBet = max;
     }
-    
+
     /**
      * Makes sure the bets in previous rounds don't linger
      */
     public static void resetBets() {
         for (Person p : players) {
             p.bet = 0;
-        }        
+        }
     }
-    
+
     /**
      * Allows all players to bet and handles a lot of CPU betting logic
      */
@@ -531,6 +535,21 @@ public class TexasHoldem extends JFrame {
         return deck[card]; //Returns the card object
     }
 
+    public static JLabel createText(String name, int posX, int posY, int sizeX, int sizeY) {
+        JLabel label = new JLabel(name);
+
+        //label.setLayout(null);
+        label.setBounds(posX, posY, sizeX, sizeY);
+
+        label.setForeground(Color.white);
+        label.setBackground(Color.black);
+        label.setOpaque(true);
+
+        label.setLocation(posX, posY);
+
+        return label;
+    }
+
     /**
      * Initializes the GUI frame
      */
@@ -539,19 +558,32 @@ public class TexasHoldem extends JFrame {
         gui = new GUI();
         jf = new JFrame();
 
-        /*
+        ///*
         final JPanel panel = (JPanel) jf.getGlassPane();
         final JButton play = new JButton("Play");
+        cpu1 = createText(String.valueOf((int) players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
+        cpu2 = createText(String.valueOf((int) players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
+        player = createText(String.valueOf((int) players[2].chips), 360, 530, TEXT_WIDTH, TEXT_HEIGHT);
+        cpu3 = createText(String.valueOf((int) players[3].chips), 70, 460, TEXT_WIDTH, TEXT_HEIGHT);
+        cpu4 = createText(String.valueOf((int) players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
+
         play.setLayout(null);
         panel.setLayout(null);
-        play.setBounds(330, 300, 59, 25);
+
         panel.setBounds(330, 300, 60, 25);
-         */
+
         //adds table and deck spirte
         jf.add(gui);
 
-        /*
         panel.setVisible(true);
+
+        //add cpu's labels
+        panel.add(cpu1);
+        panel.add(cpu2);
+        panel.add(cpu3);
+        panel.add(cpu4);
+        panel.add(player);
+
         //panel.setLayout(new GridBagLayout());
         //panel.add(play);
         play.addActionListener(new ActionListener() {
@@ -569,22 +601,16 @@ public class TexasHoldem extends JFrame {
             }
         });
         play.setLocation(330, 300);
-         */
+
+        //*/
         jf.setTitle("Texas Hold'em");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         jf.setVisible(true);
 
-        //wait 1.5 seconds to deal the flop face down
+        //wait 1 seconds to deal the flop face up
         sleepGUI(1000);
-        //setFlopDealing();
 
-        //wait 1.5 seconds to deal the turn
-        //sleepGUI(1000);
-        //setTurnDealing();
-        //wait 1.5 seconds to deal the turn
-        //sleepGUI(1000);
-        //setRiverDealing();
     }
 
     /**

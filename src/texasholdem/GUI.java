@@ -348,6 +348,13 @@ public class GUI extends JPanel implements ActionListener {
             riverY += riverYVel;
         }
 
+        //UPDATE THE CHIP COUNT OF THE CPUS/PLAYER
+        cpu1.setText("Chips: " + String.valueOf((int)players[0].chips));
+        cpu2.setText("Chips: " + String.valueOf((int)players[1].chips));
+        player.setText("Chips: " + String.valueOf((int)players[2].chips));
+        cpu3.setText("Chips: " + String.valueOf((int)players[3].chips));
+        cpu4.setText("Chips: " + String.valueOf((int)players[4].chips));
+        
         repaint(); //repaints the image every 10 milliseconds
 
     }
