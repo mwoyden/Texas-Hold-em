@@ -216,5 +216,22 @@ public class Player extends Person {
             }
         }
     }
-
+    
+    /**
+     * Prints the CPUs current stats
+     */
+    public void printInfo() {
+        System.out.println("PLAYER INFO:");
+        System.out.println("pair1 = " + pair1);
+        System.out.println("pairValue1 = " + pairValue1);
+        System.out.println("pair2 = " + pair2);
+        System.out.println("pairValue2 = " + pairValue2);
+        System.out.println("flush = " + flush);
+        System.out.println("straight = " + straight);
+        System.out.println("highCard = " + highCard);
+        System.out.println("highSuit = " + highSuit);
+        System.out.println("hand = " + hand);
+        System.out.println("CHIPS REMAINING: " + chips);
+    }
+    
 }

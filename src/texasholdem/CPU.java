@@ -337,6 +337,7 @@ public class CPU extends Person {
             System.out.println("BLUFF IN ROUND 1");
             ret = true;
         }
+        printInfo(); //Print CPU evaluated values for debugging
         return ret;
     }
 

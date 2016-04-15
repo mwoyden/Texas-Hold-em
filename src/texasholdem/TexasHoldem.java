@@ -292,6 +292,7 @@ public class TexasHoldem extends JFrame {
     public static void takeTurn() {
         Scanner console = new Scanner(System.in);
         System.out.println("PLAYER'S TURN:");
+        players[2].printInfo();
         System.out.println("Enter bet, fold, or call");
         String s = console.next();
         players[2].bet = 0;
@@ -318,7 +319,7 @@ public class TexasHoldem extends JFrame {
     /**
      * Makes sure that the highest bet is always the call bet
      */
-    public static void checkBet() {
+    public static void checkBets() {
         int max = 0;
         for (Person p : players) {
             if (p.bet > max) {
@@ -353,7 +354,7 @@ public class TexasHoldem extends JFrame {
             if (currentBet < BB_BET && round == 1) { //Makes sure players after BB bet the BB_BET
                 currentBet = BB_BET;
             }
-            checkBet();
+            checkBets();
             if (players[i].status != 0) { //If the person has not folded
                 if (players[i].name.equals("Player")) { //If the person is the player
                     System.out.println("Player betting...");
@@ -397,6 +398,7 @@ public class TexasHoldem extends JFrame {
         }
         j = 0;
         i = smallBlind;
+        checkBets();
         while (j < NUM_PLAYERS) { //For each player
             if (players[i].status != 0) { //If they haven't folded
                 System.out.println("CPU'S BET: " + players[i].bet);

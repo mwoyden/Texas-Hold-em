@@ -75,7 +75,12 @@ public abstract class Person {
     /**
      * Evaluates hand (see CPU Override)
      * @param board 
+     * @param round 
      */
     public void evaluate(Card[] board, int round) {
+    }
+    
+    public void printInfo() {
+        
     }
 }
