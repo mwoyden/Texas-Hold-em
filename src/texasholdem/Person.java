@@ -4,7 +4,7 @@ package texasholdem;
 public abstract class Person {
 
     //Variables for hand control for both CPU and player
-    public double chips; //chip found
+    public int chips; //chip found
     public int bet; //current bet given
     public Card[] hole; //Cards in the hole
     public int hand; //0 = junk, 1 = pair, 2 = 2 pair, 3 = 3 of a kind
@@ -76,6 +76,6 @@ public abstract class Person {
      * Evaluates hand (see CPU Override)
      * @param board 
      */
-    public void evaluate(Card[] board) {
+    public void evaluate(Card[] board, int round) {
     }
 }

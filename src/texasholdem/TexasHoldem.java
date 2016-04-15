@@ -24,7 +24,7 @@ public class TexasHoldem extends JFrame {
 
     //Final variables
     private static final int DECK_LENGTH = 104;
-    private static final int FRAME_WIDTH = 600, FRAME_HEIGHT = 400;
+    public static final int FRAME_WIDTH = 800, FRAME_HEIGHT = 600;
     private static final int NUM_PLAYERS = 5;
     private static final int SB_BET = 50, BB_BET = 100;
 
@@ -131,7 +131,7 @@ public class TexasHoldem extends JFrame {
         int i = 0;
         //Evaluates the CPUs' final hands
         for (i = 0; i < NUM_PLAYERS; i++) {
-            players[i].evaluate(board);
+            players[i].evaluate(board, round);
             hands[i] = players[i].hand;
         }
         int winners = 1;
@@ -230,6 +230,8 @@ public class TexasHoldem extends JFrame {
             if (p.chips > 0) {
                 p.fold(); //Ensures all hand related variables are zeroed
                 p.status = 1; //Puts the players in the game
+            } else {
+                p.status = 0;
             }
         }
     }
@@ -308,9 +310,33 @@ public class TexasHoldem extends JFrame {
             players[2].fold();
         } else if (s.equalsIgnoreCase("call")) {
             players[2].call(currentBet);
+            pot += players[2].bet;
         }
+        System.out.println("CURRENT BET AFTER PLAYERS TURN: " + currentBet);
     }
 
+    /**
+     * Makes sure that the highest bet is always the call bet
+     */
+    public static void checkBet() {
+        int max = 0;
+        for (Person p : players) {
+            if (p.bet > max) {
+                max = p.bet;
+            }
+        }
+        currentBet = max;
+    }
+    
+    /**
+     * Makes sure the bets in previous rounds don't linger
+     */
+    public static void resetBets() {
+        for (Person p : players) {
+            p.bet = 0;
+        }        
+    }
+    
     /**
      * Allows all players to bet and handles a lot of CPU betting logic
      */
@@ -322,10 +348,12 @@ public class TexasHoldem extends JFrame {
         while (j < NUM_PLAYERS) { //make sure each player goes
             if (j == 0) { //Accomodates small blind
                 currentBet = 0;
+                resetBets();
             }
             if (currentBet < BB_BET && round == 1) { //Makes sure players after BB bet the BB_BET
                 currentBet = BB_BET;
             }
+            checkBet();
             if (players[i].status != 0) { //If the person has not folded
                 if (players[i].name.equals("Player")) { //If the person is the player
                     System.out.println("Player betting...");
@@ -371,12 +399,16 @@ public class TexasHoldem extends JFrame {
         i = smallBlind;
         while (j < NUM_PLAYERS) { //For each player
             if (players[i].status != 0) { //If they haven't folded
+                System.out.println("CPU'S BET: " + players[i].bet);
+                System.out.println("CURRENT BET: " + currentBet);
                 if (players[i].bet < currentBet) { //If there was a raise on the table
                     if (i != 2) {
                         if (players[i].call(round, currentBet, board)) { //CPU decides to call
                             System.out.println("CPU " + i + " CALLED");
-                            pot -= players[i].bet; //CPU retracts bet
-                            pot += currentBet; //CPU adds new bet -- this isn't how poker works, but the logic works in the program
+                            pot += currentBet - players[i].bet; //CPU adds new bet
+                        } else {
+                            players[i].fold();
+                            System.out.println("DIDN'T WANT TO CALL");
                         }
                     } else { //Allow the player to call CPU raise
                         System.out.println("Do you call " + currentBet + "?");
@@ -408,7 +440,7 @@ public class TexasHoldem extends JFrame {
     public static void waitCPU(int i, String s) {
         System.out.println(s); //Prints the step
         try {
-            sleep(800);
+            sleep(500);
         } catch (InterruptedException ex) {
         }
     }
@@ -452,7 +484,9 @@ public class TexasHoldem extends JFrame {
         int i = 0;
         Random rand = new Random();
         System.out.println("DEALING...");
-        players[2].status = 1;
+        if (players[2].chips > 0) {
+            players[2].status = 1;
+        }
         while (i < NUM_PLAYERS) { //For each player
             if (i == smallBlind) { //If the player being dealt is the small blind
                 if (players[i].name.contains("CPU")) { //If players is CPU
@@ -503,18 +537,18 @@ public class TexasHoldem extends JFrame {
         gui = new GUI();
         jf = new JFrame();
 
-        ///*
+        /*
         final JPanel panel = (JPanel) jf.getGlassPane();
         final JButton play = new JButton("Play");
         play.setLayout(null);
         panel.setLayout(null);
         play.setBounds(330, 300, 59, 25);
         panel.setBounds(330, 300, 60, 25);
-        // */
+         */
         //adds table and deck spirte
         jf.add(gui);
 
-        ///*
+        /*
         panel.setVisible(true);
         //panel.setLayout(new GridBagLayout());
         panel.add(play);
@@ -533,7 +567,7 @@ public class TexasHoldem extends JFrame {
             }
         });
         play.setLocation(330, 300);
-         //*/
+         */
         jf.setTitle("Texas Hold'em");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -600,7 +634,7 @@ public class TexasHoldem extends JFrame {
      * Constructor called by init(), initializes the deck and the players
      */
     public TexasHoldem() {
-        initPlayers(10000);
+        initPlayers(1000);
         initDeck();
         initGUI();
     }

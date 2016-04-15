@@ -82,11 +82,11 @@ public class Player extends Person {
 
     /**
      * Evaluates hand (see CPU Override)
-     *
      * @param board
+     * @param round
      */
     @Override
-    public void evaluate(Card[] board) { //Finds if the board has a pair on it
+    public void evaluate(Card[] board, int round) { //Finds if the board has a pair on it
         Map<Integer, Integer> m = new HashMap();
         for (Card c : board) {
             if (m.containsKey(c.value)) {
