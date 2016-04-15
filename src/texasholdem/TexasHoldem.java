@@ -595,8 +595,6 @@ public class TexasHoldem extends JFrame {
         panel.add(cpu4);
         panel.add(player);
 
-        //panel.setLayout(new GridBagLayout());
-        //panel.add(play);
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -619,7 +617,7 @@ public class TexasHoldem extends JFrame {
         jf.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         jf.setVisible(true);
 
-        //wait 1 seconds to deal the flop face up
+        //wait 1 second
         sleepGUI(1000);
 
     }
