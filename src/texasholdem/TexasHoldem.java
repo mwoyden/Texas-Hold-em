@@ -22,9 +22,9 @@ public class TexasHoldem extends JFrame {
     public static BufferedImage image;
     public static String path;
     public static int pot, round, currentBet, smallBlind, bigBlind;
-    public static boolean called = false, folded = false;
+    public static boolean called = false, folded = false, betted = false;
 
-    public static JLabel cpu1, cpu2, cpu3, cpu4, player;
+    public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot;
 
     //Final variables
     private static final int DECK_LENGTH = 104;
@@ -100,8 +100,6 @@ public class TexasHoldem extends JFrame {
         round = 1; //Set the round to pre-flop
         while (true) { //Loop until the game exits
             System.out.println("ROUND: " + round);
-            called = false;
-            folded = false;
             switch (round) {
                 case 1: //Before the flop
                     deal(); //Deal the hole
@@ -322,8 +320,8 @@ public class TexasHoldem extends JFrame {
             players[2].call(currentBet);
             pot += players[2].bet;
         }
-        */
-        while (!called && !folded) {
+         */
+        while (!called && !folded && !betted) {
             try {
                 sleep(1);
             } catch (InterruptedException ex) {
@@ -376,6 +374,7 @@ public class TexasHoldem extends JFrame {
                     System.out.println("Player betting...");
                     called = false;
                     folded = false;
+                    betted = false;
                     takeTurn(); //Take your turn to decide
                     //players[i].status = 0; //folds the player for CPU simulation
                 } else if (players[i].name.contains("CPU")) { //If the person is the CPU
@@ -443,7 +442,7 @@ public class TexasHoldem extends JFrame {
                             System.out.println("Bitch. you folded");
                             players[i].fold();
                         }
-                        */
+                         */
                         takeTurn();
                     }
                 }
@@ -509,6 +508,9 @@ public class TexasHoldem extends JFrame {
         System.out.println("DEALING...");
         if (players[2].chips > 0) {
             players[2].status = 1;
+            called = false;
+            folded = false;
+            betted = false;
         }
         while (i < NUM_PLAYERS) { //For each player
             if (i == smallBlind) { //If the player being dealt is the small blind
@@ -563,14 +565,16 @@ public class TexasHoldem extends JFrame {
      * @return
      */
     public static JLabel createText(String name, int posX, int posY, int sizeX, int sizeY) {
-        JLabel label = new JLabel("<html>" +name + "<br> fuck</html>");
+        JLabel label = new JLabel(name);
 
         //label.setLayout(null);
         label.setBounds(posX, posY, sizeX, sizeY);
 
         label.setForeground(Color.white);
-        label.setBackground(Color.black);
-        label.setOpaque(true);
+        if (posY != 180) {
+            label.setBackground(Color.black);
+            label.setOpaque(true);
+        }
 
         label.setLocation(posX, posY);
 
@@ -589,19 +593,25 @@ public class TexasHoldem extends JFrame {
         final JPanel panel = (JPanel) jf.getGlassPane();
         final JButton call = new JButton("Call");
         final JButton fold = new JButton("Fold");
-        
+        final JButton bet = new JButton("Bet");
+        final JButton plus = new JButton("+");
+        final JButton minus = new JButton("-");
+
         cpu1 = createText(String.valueOf(players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
         cpu2 = createText(String.valueOf(players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
         player = createText(String.valueOf(players[2].chips), 360, 530, TEXT_WIDTH, TEXT_HEIGHT);
         cpu3 = createText(String.valueOf(players[3].chips), 70, 460, TEXT_WIDTH, TEXT_HEIGHT);
         cpu4 = createText(String.valueOf(players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
+        currentPot = createText(String.valueOf(pot), 360, 180, TEXT_WIDTH+20, TEXT_HEIGHT+50);
 
         //location for call and fold button
-        call.setBounds(275, 510, 59 , 25);
+        call.setBounds(275, 510, 59, 25);
         call.setLocation(275, 510);
-        fold.setBounds(275, 480, 59 , 25);
+        fold.setBounds(275, 480, 59, 25);
         fold.setLocation(275, 480);
-        
+        bet.setBounds(275, 450, 59, 25);
+        bet.setLocation(275, 450);
+
         call.setLayout(null);
         panel.setLayout(null);
 
@@ -618,8 +628,10 @@ public class TexasHoldem extends JFrame {
         panel.add(cpu3);
         panel.add(cpu4);
         panel.add(player);
+        panel.add(currentPot);
         panel.add(call);
         panel.add(fold);
+        panel.add(bet);
 
         call.addActionListener(new ActionListener() {
             @Override
@@ -629,7 +641,7 @@ public class TexasHoldem extends JFrame {
 
             }
         });
-        
+
         fold.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

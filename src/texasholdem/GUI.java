@@ -354,6 +354,7 @@ public class GUI extends JPanel implements ActionListener {
         player.setText("<html> <strong>PLAYER</strong> <br> Chips: " + String.valueOf(players[2].chips) + " </html>");
         cpu3.setText("<html> <strong>CPU 3</strong> <br> Chips: " + String.valueOf(players[3].chips) + " </html>");
         cpu4.setText("<html> <strong>CPU 4</strong> <br> Chips: " + String.valueOf(players[4].chips) + " </html>");
+        currentPot.setText("<html> <h2><strong>POT: </strong>" + String.valueOf(pot) + "</h2> </html>");
         
         repaint(); //repaints the image every 10 milliseconds
 
