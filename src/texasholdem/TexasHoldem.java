@@ -21,11 +21,12 @@ public class TexasHoldem extends JFrame {
     public static Card[] deck, board;
     public static Person[] players;
     public static BufferedImage image;
-    public static String path;
+    public static String path, s = ""; //s used to waitCPU steps
     public static int pot, round, currentBet, smallBlind, bigBlind;
     public static boolean called = false, folded = false, betted = false;
 
-    public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot;
+    public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot; //for the cpu labels and chip count 
+    public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action; //for the labels of the cpu actions
 
     //Final variables
     private static final int DECK_LENGTH = 104;
@@ -36,13 +37,13 @@ public class TexasHoldem extends JFrame {
 
     //Deck Map is used to map values in program to sprites in the GUI
     public static final String[] DECK_MAP = new String[]{
-         "ace_clubs.jpg", "ace_spades.jpg", "ace_hearts.jpg", "ace_diamonds.jpg",
+        "ace_clubs.jpg", "ace_spades.jpg", "ace_hearts.jpg", "ace_diamonds.jpg",
         "two_clubs.jpg", "two_spades.jpg", "two_hearts.jpg", "two_diamonds.jpg",
-        "three_clubs.jpg","three_spades.jpg", "three_hearts.jpg", "three_diamonds.jpg",
+        "three_clubs.jpg", "three_spades.jpg", "three_hearts.jpg", "three_diamonds.jpg",
         "four_clubs.jpg", "four_spades.jpg", "four_hearts.jpg", "four_diamonds.jpg",
         "five_clubs.jpg", "five_spades.jpg", "five_hearts.jpg", "five_diamonds.jpg",
         "six_clubs.jpg", "six_spades.jpg", "six_hearts.jpg", "six_diamonds.jpg",
-        "seven_clubs.jpg", "seven_spades.jpg", "seven_hearts.jpg",  "seven_diamonds.jpg",
+        "seven_clubs.jpg", "seven_spades.jpg", "seven_hearts.jpg", "seven_diamonds.jpg",
         "eight_clubs.jpg", "eight_spades.jpg", "eight_hearts.jpg", "eight_diamonds.jpg",
         "nine_clubs.jpg", "nine_spades.jpg", "nine_hearts.jpg", "nine_diamonds.jpg",
         "ten_clubs.jpg", "ten_spades.jpg", "ten_hearts.jpg", "ten_diamonds.jpg",
@@ -51,11 +52,11 @@ public class TexasHoldem extends JFrame {
         "king_clubs.jpg", "king_spades.jpg", "king_hearts.jpg", "king_diamonds.jpg",
         "ace_clubs.jpg", "ace_spades.jpg", "ace_hearts.jpg", "ace_diamonds.jpg",
         "two_clubs.jpg", "two_spades.jpg", "two_hearts.jpg", "two_diamonds.jpg",
-        "three_clubs.jpg","three_spades.jpg", "three_hearts.jpg", "three_diamonds.jpg",
+        "three_clubs.jpg", "three_spades.jpg", "three_hearts.jpg", "three_diamonds.jpg",
         "four_clubs.jpg", "four_spades.jpg", "four_hearts.jpg", "four_diamonds.jpg",
         "five_clubs.jpg", "five_spades.jpg", "five_hearts.jpg", "five_diamonds.jpg",
         "six_clubs.jpg", "six_spades.jpg", "six_hearts.jpg", "six_diamonds.jpg",
-        "seven_clubs.jpg","seven_spades.jpg", "seven_hearts.jpg", "seven_diamonds.jpg",
+        "seven_clubs.jpg", "seven_spades.jpg", "seven_hearts.jpg", "seven_diamonds.jpg",
         "eight_clubs.jpg", "eight_spades.jpg", "eight_hearts.jpg", "eight_diamonds.jpg",
         "nine_clubs.jpg", "nine_spades.jpg", "nine_hearts.jpg", "nine_diamonds.jpg",
         "ten_clubs.jpg", "ten_spades.jpg", "ten_hearts.jpg", "ten_diamonds.jpg",
@@ -359,7 +360,7 @@ public class TexasHoldem extends JFrame {
         System.out.println("PLACING BETS IN ROUND: " + round);
         currentBet = BB_BET; //Set the minumum bet to the BB_BET (100)
         int i = smallBlind, j = 0;
-        String s = ""; //String used to waitCPU steps
+        //String s = ""; //String used to waitCPU steps
         while (j < NUM_PLAYERS) { //make sure each player goes
             if (j == 0) { //Accomodates small blind
                 currentBet = 0;
@@ -371,7 +372,8 @@ public class TexasHoldem extends JFrame {
             checkBets();
             if (players[i].status != 0) { //If the person has not folded
                 if (players[i].name.equals("Player")) { //If the person is the player
-                    System.out.println("Player betting...");
+                    s = "Player betting...";
+                    System.out.println(s);
                     called = false;
                     folded = false;
                     betted = false;
@@ -571,10 +573,6 @@ public class TexasHoldem extends JFrame {
         label.setBounds(posX, posY, sizeX, sizeY);
 
         label.setForeground(Color.white);
-        if (posY != 180) {
-            label.setBackground(Color.black);
-            label.setOpaque(true);
-        }
 
         label.setLocation(posX, posY);
 
@@ -589,24 +587,28 @@ public class TexasHoldem extends JFrame {
         gui = new GUI();
         jf = new JFrame();
 
-
-        
         final JPanel panel = (JPanel) jf.getGlassPane();
         final JButton call = new JButton("Call"); //creates call button
         final JButton fold = new JButton("Fold"); //creates fold button
-        
+
         //creates/initializes the text, but the update/rewritten gets done in GUI.ActionPerformed
         final JButton bet = new JButton("Bet");
         final JButton plus = new JButton("+");
         final JButton minus = new JButton("-");
 
-
+        //create the cpu labels and chip count
         cpu1 = createText(String.valueOf(players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
         cpu2 = createText(String.valueOf(players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
         player = createText(String.valueOf(players[2].chips), 360, 530, TEXT_WIDTH, TEXT_HEIGHT);
         cpu3 = createText(String.valueOf(players[3].chips), 70, 460, TEXT_WIDTH, TEXT_HEIGHT);
         cpu4 = createText(String.valueOf(players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
-        currentPot = createText(String.valueOf(pot), 360, 180, TEXT_WIDTH+20, TEXT_HEIGHT+50);
+        currentPot = createText(String.valueOf(pot), 360, 180, TEXT_WIDTH + 20, TEXT_HEIGHT + 50);
+
+        //create the label for the cpu's actions
+        cpu1Action = createText("", 640, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu2Action = createText("", 620, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu3Action = createText("", 70, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu4Action = createText("", 100, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
 
         //location for call and fold button
         call.setBounds(275, 510, 59, 25);
@@ -637,6 +639,12 @@ public class TexasHoldem extends JFrame {
         panel.add(fold);
         panel.add(bet);
 
+        //add the cpu's action labels
+        panel.add(cpu1Action);
+        panel.add(cpu2Action);
+        panel.add(cpu3Action);
+        panel.add(cpu4Action);
+
         call.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -654,7 +662,6 @@ public class TexasHoldem extends JFrame {
                 folded = true;
             }
         });
-
 
         jf.setTitle("Texas Hold'em");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -720,5 +727,3 @@ public class TexasHoldem extends JFrame {
         initGUI();
     }
 }
-
-
