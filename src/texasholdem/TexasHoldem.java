@@ -589,13 +589,17 @@ public class TexasHoldem extends JFrame {
         gui = new GUI();
         jf = new JFrame();
 
-        ///*
+
+        
         final JPanel panel = (JPanel) jf.getGlassPane();
-        final JButton call = new JButton("Call");
-        final JButton fold = new JButton("Fold");
+        final JButton call = new JButton("Call"); //creates call button
+        final JButton fold = new JButton("Fold"); //creates fold button
+        
+        //creates/initializes the text, but the update/rewritten gets done in GUI.ActionPerformed
         final JButton bet = new JButton("Bet");
         final JButton plus = new JButton("+");
         final JButton minus = new JButton("-");
+
 
         cpu1 = createText(String.valueOf(players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
         cpu2 = createText(String.valueOf(players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
@@ -642,6 +646,7 @@ public class TexasHoldem extends JFrame {
             }
         });
 
+        //set the action when the call button is pressed
         fold.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -649,9 +654,8 @@ public class TexasHoldem extends JFrame {
                 folded = true;
             }
         });
-        //call.setLocation(330, 300);
 
-        //*/
+
         jf.setTitle("Texas Hold'em");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -716,3 +720,5 @@ public class TexasHoldem extends JFrame {
         initGUI();
     }
 }
+
+
