@@ -605,6 +605,12 @@ public class TexasHoldem extends JFrame {
         currentPot = createText(String.valueOf(pot), 360, 180, TEXT_WIDTH + 20, TEXT_HEIGHT + 50);
         showBet = createText(String.valueOf(playerBet), 220, 478, TEXT_WIDTH, TEXT_HEIGHT);
         
+        //create the label for the cpu's actions
+        cpu1Action = createText("", 640, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu2Action = createText("", 620, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu3Action = createText("", 70, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu4Action = createText("", 100, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        
         //location for call and fold button
         call.setBounds(275, 510, 59, 25);
         call.setLocation(275, 510);
