@@ -21,11 +21,12 @@ public class TexasHoldem extends JFrame {
     public static Card[] deck, board;
     public static Person[] players;
     public static BufferedImage image;
-    public static String path;
+    public static String path, s = "";
     public static int pot, round, currentBet, smallBlind, bigBlind, playerBet;
     public static boolean called = false, folded = false, betted = false;
 
-    public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot, showBet;
+    public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot, showBet; //for the cpu labels and chip count 
+    public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action; //for the labels of the cpu actions
 
     //Final variables
     private static final int DECK_LENGTH = 104;
@@ -359,7 +360,7 @@ public class TexasHoldem extends JFrame {
         System.out.println("PLACING BETS IN ROUND: " + round);
         currentBet = BB_BET; //Set the minumum bet to the BB_BET (100)
         int i = smallBlind, j = 0;
-        String s = ""; //String used to waitCPU steps
+        //String s = ""; //String used to waitCPU steps
         while (j < NUM_PLAYERS) { //make sure each player goes
             if (j == 0) { //Accomodates small blind
                 currentBet = 0;
@@ -371,7 +372,8 @@ public class TexasHoldem extends JFrame {
             checkBets();
             if (players[i].status != 0) { //If the person has not folded
                 if (players[i].name.equals("Player")) { //If the person is the player
-                    System.out.println("Player betting...");
+                    s = "Player betting...";
+                    System.out.println(s);
                     called = false;
                     folded = false;
                     betted = false;
@@ -594,6 +596,7 @@ public class TexasHoldem extends JFrame {
         final JButton plus = new JButton("+");
         final JButton minus = new JButton("-");
 
+        //create the cpu labels and chip count
         cpu1 = createText(String.valueOf(players[0].chips), 680, 70, TEXT_WIDTH, TEXT_HEIGHT);
         cpu2 = createText(String.valueOf(players[1].chips), 680, 460, TEXT_WIDTH, TEXT_HEIGHT);
         player = createText(String.valueOf(players[2].chips), 360, 530, TEXT_WIDTH, TEXT_HEIGHT);
@@ -637,6 +640,12 @@ public class TexasHoldem extends JFrame {
         panel.add(bet);
         panel.add(plus);
         panel.add(minus);
+
+        //add the cpu's action labels
+        panel.add(cpu1Action);
+        panel.add(cpu2Action);
+        panel.add(cpu3Action);
+        panel.add(cpu4Action);
 
         call.addActionListener(new ActionListener() {
             @Override
