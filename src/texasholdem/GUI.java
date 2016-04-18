@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -13,10 +14,10 @@ import static java.lang.Thread.sleep;
 import javax.imageio.ImageIO;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.net.URL;
 import javax.swing.*;
 
 import static texasholdem.TexasHoldem.*;
-
 
 public class GUI extends JPanel implements ActionListener {
 
@@ -72,13 +73,12 @@ public class GUI extends JPanel implements ActionListener {
     static int riverYVel = VELOCITY;
 
     int j = 0, k = 0;
-    
+
     //draws the table
     public void createTable(Graphics g) {
         /* DEFAULT JFRAME SIZE IS 385 X 600*/
 
-        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/table6.jpg";
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/table6.jpg"));
         image = i.getImage();
         g.drawImage(image, 0, 0, /*WIDTH*/ FRAME_WIDTH, /*HEIGHT*/ FRAME_HEIGHT, this);
     }
@@ -86,8 +86,7 @@ public class GUI extends JPanel implements ActionListener {
     public void dealCPU(Graphics g) {
 
         for (j = 0; j < NUM_CPUS * 2; j++) {
-            path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-            i = new ImageIcon(path);
+            i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
             image = i.getImage();
             g.drawImage(image, cpuX[j], cpuY[j], this);
         }
@@ -99,15 +98,13 @@ public class GUI extends JPanel implements ActionListener {
         //first card
         path = card;
 
-        //path = DECK_MAP[players[2].hole[0].id];
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + path));
         image = i.getImage();
         g.drawImage(image, playerX[0], playerY[0], this);
 
         //second card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card2 + ".jpg";
         path = card2;
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + path));
         image = i.getImage();
         g.drawImage(image, playerX[1], playerY[1], this);
 
@@ -116,57 +113,52 @@ public class GUI extends JPanel implements ActionListener {
     public void dealFlop(Graphics g, String card, String card2, String card3) {
         //first card
         path = card;
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + path));
         image = i.getImage();
         g.drawImage(image, flopX[0], flopY[0], this);
 
         //second card
         path = card2;
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + path));
         image = i.getImage();
         g.drawImage(image, flopX[1], flopY[1], this);
 
         //third card
         path = card3;
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + path));
         image = i.getImage();
         g.drawImage(image, flopX[2], flopY[2], this);
     }
 
     public void dealTurn(Graphics g, String card) {
         //first card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card + ".jpg";
         path = card;
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + path));
         image = i.getImage();
         g.drawImage(image, turnX, turnY, this);
     }
 
     public void dealRiver(Graphics g, String card) {
         //first card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card + ".jpg";
         path = card;
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + path));
         image = i.getImage();
         g.drawImage(image, riverX, riverY, this);
     }
 
-    public void showExtraCards(Graphics g, String card, String card2, String card3) {
+    public void showExtraCards(Graphics g) {
         //third card
-        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card3 + ".jpg";
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, extraX[2], extraY[2], this);
 
         //second card
-        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card2 + ".jpg";
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, extraX[1], extraY[1], this);
 
         //first card
-        path = System.getProperty("user.dir") + "/src/texasholdem/sprites/" + card + ".jpg";
-        i = new ImageIcon(path);
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, extraX[0], extraY[0], this);
 
@@ -178,7 +170,7 @@ public class GUI extends JPanel implements ActionListener {
 
         //draws the table
         createTable(g);
-        
+
         if (players[2].status == 1) {
             //deals face up cards for the player
             dealPlayer(g, DECK_MAP[players[2].hole[0].id], DECK_MAP[players[2].hole[1].id]);
@@ -205,7 +197,7 @@ public class GUI extends JPanel implements ActionListener {
         }
 
         //shows extra cards on table
-        showExtraCards(g, "card_back", "card_back", "card_back");
+        showExtraCards(g);
 
         //important-starts the timer
         clock.start();
@@ -237,7 +229,7 @@ public class GUI extends JPanel implements ActionListener {
 
         /*(240) + (flopIncrement * 4);*/
         //positions for the river
-        int riverPosX =  483;
+        int riverPosX = 483;
         int riverPosY = flopPosY;
 
         if (cpuDealing) {
@@ -355,7 +347,7 @@ public class GUI extends JPanel implements ActionListener {
         cpu3.setText("<html> <strong>CPU 3</strong> <br> Chips: " + String.valueOf(players[3].chips) + " </html>");
         cpu4.setText("<html> <strong>CPU 4</strong> <br> Chips: " + String.valueOf(players[4].chips) + " </html>");
         currentPot.setText("<html> <h2><strong>POT: </strong>" + String.valueOf(pot) + "</h2> </html>");
-        
+
         repaint(); //repaints the image every 10 milliseconds
 
     }
@@ -393,7 +385,8 @@ public class GUI extends JPanel implements ActionListener {
     }
 
     /**
-     * Resets the position of each card and the velocity. Also resets the card dealing flags
+     * Resets the position of each card and the velocity. Also resets the card
+     * dealing flags
      */
     public static void resetGUI() {
         int i = 0;
@@ -430,7 +423,7 @@ public class GUI extends JPanel implements ActionListener {
         riverY = STARTING_Y;
         riverXVel = VELOCITY;
         riverYVel = VELOCITY;
-        
+
         resetDealing();
         resetFlopDealing();
         resetTurnDealing();

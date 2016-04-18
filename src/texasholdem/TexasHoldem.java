@@ -10,6 +10,7 @@ import javax.swing.*;
 import static texasholdem.GUI.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.net.URL;
 
 public class TexasHoldem extends JFrame {
 
@@ -34,34 +35,33 @@ public class TexasHoldem extends JFrame {
     private static final int TEXT_WIDTH = 100, TEXT_HEIGHT = 30;
 
     //Deck Map is used to map values in program to sprites in the GUI
-    private static final String dir = System.getProperty("user.dir") + "/src/texasholdem/sprites/";
     public static final String[] DECK_MAP = new String[]{
-        dir + "ace_clubs.jpg", dir + "ace_spades.jpg", dir + "ace_hearts.jpg", dir + "ace_diamonds.jpg",
-        dir + "two_clubs.jpg", dir + "two_spades.jpg", dir + "two_hearts.jpg", dir + "two_diamonds.jpg",
-        dir + "three_clubs.jpg", dir + "three_spades.jpg", dir + "three_hearts.jpg", dir + "three_diamonds.jpg",
-        dir + "four_clubs.jpg", dir + "four_spades.jpg", dir + "four_hearts.jpg", dir + "four_diamonds.jpg",
-        dir + "five_clubs.jpg", dir + "five_spades.jpg", dir + "five_hearts.jpg", dir + "five_diamonds.jpg",
-        dir + "six_clubs.jpg", dir + "six_spades.jpg", dir + "six_hearts.jpg", dir + "six_diamonds.jpg",
-        dir + "seven_clubs.jpg", dir + "seven_spades.jpg", dir + "seven_hearts.jpg", dir + "seven_diamonds.jpg",
-        dir + "eight_clubs.jpg", dir + "eight_spades.jpg", dir + "eight_hearts.jpg", dir + "eight_diamonds.jpg",
-        dir + "nine_clubs.jpg", dir + "nine_spades.jpg", dir + "nine_hearts.jpg", dir + "nine_diamonds.jpg",
-        dir + "ten_clubs.jpg", dir + "ten_spades.jpg", dir + "ten_hearts.jpg", dir + "ten_diamonds.jpg",
-        dir + "jack_clubs.jpg", dir + "jack_spades.jpg", dir + "jack_hearts.jpg", dir + "jack_diamonds.jpg",
-        dir + "queen_clubs.jpg", dir + "queen_spades.jpg", dir + "queen_hearts.jpg", dir + "queen_diamonds.jpg",
-        dir + "king_clubs.jpg", dir + "king_spades.jpg", dir + "king_hearts.jpg", dir + "king_diamonds.jpg",
-        dir + "ace_clubs.jpg", dir + "ace_spades.jpg", dir + "ace_hearts.jpg", dir + "ace_diamonds.jpg",
-        dir + "two_clubs.jpg", dir + "two_spades.jpg", dir + "two_hearts.jpg", dir + "two_diamonds.jpg",
-        dir + "three_clubs.jpg", dir + "three_spades.jpg", dir + "three_hearts.jpg", dir + "three_diamonds.jpg",
-        dir + "four_clubs.jpg", dir + "four_spades.jpg", dir + "four_hearts.jpg", dir + "four_diamonds.jpg",
-        dir + "five_clubs.jpg", dir + "five_spades.jpg", dir + "five_hearts.jpg", dir + "five_diamonds.jpg",
-        dir + "six_clubs.jpg", dir + "six_spades.jpg", dir + "six_hearts.jpg", dir + "six_diamonds.jpg",
-        dir + "seven_clubs.jpg", dir + "seven_spades.jpg", dir + "seven_hearts.jpg", dir + "seven_diamonds.jpg",
-        dir + "eight_clubs.jpg", dir + "eight_spades.jpg", dir + "eight_hearts.jpg", dir + "eight_diamonds.jpg",
-        dir + "nine_clubs.jpg", dir + "nine_spades.jpg", dir + "nine_hearts.jpg", dir + "nine_diamonds.jpg",
-        dir + "ten_clubs.jpg", dir + "ten_spades.jpg", dir + "ten_hearts.jpg", dir + "ten_diamonds.jpg",
-        dir + "jack_clubs.jpg", dir + "jack_spades.jpg", dir + "jack_hearts.jpg", dir + "jack_diamonds.jpg",
-        dir + "queen_clubs.jpg", dir + "queen_spades.jpg", dir + "queen_hearts.jpg", dir + "queen_diamonds.jpg",
-        dir + "king_clubs.jpg", dir + "king_spades.jpg", dir + "king_hearts.jpg", dir + "king_diamonds.jpg"};
+         "ace_clubs.jpg", "ace_spades.jpg", "ace_hearts.jpg", "ace_diamonds.jpg",
+        "two_clubs.jpg", "two_spades.jpg", "two_hearts.jpg", "two_diamonds.jpg",
+        "three_clubs.jpg","three_spades.jpg", "three_hearts.jpg", "three_diamonds.jpg",
+        "four_clubs.jpg", "four_spades.jpg", "four_hearts.jpg", "four_diamonds.jpg",
+        "five_clubs.jpg", "five_spades.jpg", "five_hearts.jpg", "five_diamonds.jpg",
+        "six_clubs.jpg", "six_spades.jpg", "six_hearts.jpg", "six_diamonds.jpg",
+        "seven_clubs.jpg", "seven_spades.jpg", "seven_hearts.jpg",  "seven_diamonds.jpg",
+        "eight_clubs.jpg", "eight_spades.jpg", "eight_hearts.jpg", "eight_diamonds.jpg",
+        "nine_clubs.jpg", "nine_spades.jpg", "nine_hearts.jpg", "nine_diamonds.jpg",
+        "ten_clubs.jpg", "ten_spades.jpg", "ten_hearts.jpg", "ten_diamonds.jpg",
+        "jack_clubs.jpg", "jack_spades.jpg", "jack_hearts.jpg", "jack_diamonds.jpg",
+        "queen_clubs.jpg", "queen_spades.jpg", "queen_hearts.jpg", "queen_diamonds.jpg",
+        "king_clubs.jpg", "king_spades.jpg", "king_hearts.jpg", "king_diamonds.jpg",
+        "ace_clubs.jpg", "ace_spades.jpg", "ace_hearts.jpg", "ace_diamonds.jpg",
+        "two_clubs.jpg", "two_spades.jpg", "two_hearts.jpg", "two_diamonds.jpg",
+        "three_clubs.jpg","three_spades.jpg", "three_hearts.jpg", "three_diamonds.jpg",
+        "four_clubs.jpg", "four_spades.jpg", "four_hearts.jpg", "four_diamonds.jpg",
+        "five_clubs.jpg", "five_spades.jpg", "five_hearts.jpg", "five_diamonds.jpg",
+        "six_clubs.jpg", "six_spades.jpg", "six_hearts.jpg", "six_diamonds.jpg",
+        "seven_clubs.jpg","seven_spades.jpg", "seven_hearts.jpg", "seven_diamonds.jpg",
+        "eight_clubs.jpg", "eight_spades.jpg", "eight_hearts.jpg", "eight_diamonds.jpg",
+        "nine_clubs.jpg", "nine_spades.jpg", "nine_hearts.jpg", "nine_diamonds.jpg",
+        "ten_clubs.jpg", "ten_spades.jpg", "ten_hearts.jpg", "ten_diamonds.jpg",
+        "jack_clubs.jpg", "jack_spades.jpg", "jack_hearts.jpg", "jack_diamonds.jpg",
+        "queen_clubs.jpg", "queen_spades.jpg", "queen_hearts.jpg", "queen_diamonds.jpg",
+        "king_clubs.jpg", "king_spades.jpg", "king_hearts.jpg", "king_diamonds.jpg"};
 
     /**
      * Main
