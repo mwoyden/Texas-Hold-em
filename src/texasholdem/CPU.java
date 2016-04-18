@@ -344,6 +344,7 @@ public class CPU extends Person {
     /**
      * Prints the CPUs current stats
      */
+    @Override
     public void printInfo() {
         System.out.println("CPU INFO:");
         System.out.println("pair1 = " + pair1);
