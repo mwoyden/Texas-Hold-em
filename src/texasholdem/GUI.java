@@ -92,73 +92,73 @@ public class GUI extends JPanel implements ActionListener {
         }
 
     }
-    
-    public void dealCPU0(Graphics g){
+
+    public void dealCPU0(Graphics g) {
         //first card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[0], cpuY[0], this);
-        
+
         //second card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[1], cpuY[1], this);
-        
+
     }
-    
-    public void dealCPU1(Graphics g){
+
+    public void dealCPU1(Graphics g) {
         //first card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[2], cpuY[2], this);
-        
+
         //second card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[3], cpuY[3], this);
-        
+
     }
-    
-    public void dealCPU2(Graphics g){
+
+    public void dealCPU2(Graphics g) {
         //first card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[4], cpuY[4], this);
-        
+
         //second card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[5], cpuY[5], this);
-        
+
     }
-    
-    public void dealCPU3(Graphics g){
+
+    public void dealCPU3(Graphics g) {
         //first card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[6], cpuY[6], this);
-        
+
         //second card
         //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
         //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[7], cpuY[7], this);
-        
+
     }
 
     public void dealPlayer(Graphics g, String card, String card2) {
@@ -246,10 +246,18 @@ public class GUI extends JPanel implements ActionListener {
 
         if (cpuDealing) {
             //deals facedown cards for the CPU's
-            dealCPU0(g);
-            //dealCPU1(g);
-            dealCPU2(g);
-            dealCPU3(g);
+            if (players[0].status == 1) {
+                dealCPU0(g);
+            }
+            if (players[1].status == 1) {
+                dealCPU1(g);
+            }
+            if (players[3].status == 1) {
+                dealCPU2(g);
+            }
+            if (players[4].status == 1) {
+                dealCPU3(g);
+            }
         }
 
         //deals three cards face up for the flop
@@ -302,82 +310,79 @@ public class GUI extends JPanel implements ActionListener {
         int riverPosX = 483;
         int riverPosY = flopPosY;
 
-        
-        if(cpuDealing){
-            
+        if (cpuDealing) {
+
             //deal cpu0's first and second card
-            for(j=0; j<2; j++){
-                if((cpuX[j] > posX[j])){
+            for (j = 0; j < 2; j++) {
+                if ((cpuX[j] > posX[j])) {
                     XVel[j] = 0; //makes the image stop at x value.
                 }
-                
-                if(cpuY[j] > posY[j]){
+
+                if (cpuY[j] > posY[j]) {
                     YVel[j] = 0;
                 }
-                
+
                 cpuX[j] += XVel[j]; // moves the image
                 cpuY[j] += YVel[j];
-                
+
                 posX[j] += increment;
                 posY[j] += increment;
-                
+
             }
-            
+
             //deal cpu1's first and second card
-            for(j=2; j<4; j++){
-                if((cpuX[j] > posX[j])){
+            for (j = 2; j < 4; j++) {
+                if ((cpuX[j] > posX[j])) {
                     XVel[j] = 0; //makes the image stop at x value.
                 }
-                
-                if(cpuY[j] > posY[j]){
+
+                if (cpuY[j] > posY[j]) {
                     YVel[j] = 0;
                 }
-                
+
                 cpuX[j] += XVel[j]; // moves the image
                 cpuY[j] += YVel[j];
-                
+
                 posX[j] += increment;
                 posY[j] += increment;
-                
+
             }
-            
+
             //deal cpu2's first and second card
-            for(j=4; j<6; j++){
-                if((cpuX[j] < posX[j])){
+            for (j = 4; j < 6; j++) {
+                if ((cpuX[j] < posX[j])) {
                     XVel[j] = 0; //makes the image stop at x value.
                 }
-                
-                if(cpuY[j] > posY[j]){
+
+                if (cpuY[j] > posY[j]) {
                     YVel[j] = 0;
                 }
-                
+
                 cpuX[j] += XVel[j]; // moves the image
                 cpuY[j] += YVel[j];
-                
+
                 posX[j] += increment;
                 posY[j] += increment;
-                
+
             }
-            
+
             //deal cpu2's first and second card
-            for(j=6; j<8; j++){
-                if((cpuX[j] < posX[j])){
+            for (j = 6; j < 8; j++) {
+                if ((cpuX[j] < posX[j])) {
                     XVel[j] = 0; //makes the image stop at x value.
                 }
-                
-                if(cpuY[j] > posY[j]){
+
+                if (cpuY[j] > posY[j]) {
                     YVel[j] = 0;
                 }
-                
+
                 cpuX[j] += XVel[j]; // moves the image
                 cpuY[j] += YVel[j];
-                
+
                 posX[j] += increment;
                 posY[j] += increment;
-                
+
             }
-            
-            
 
             //players animations
             for (j = 0; j < 2; j++) {
@@ -454,6 +459,7 @@ public class GUI extends JPanel implements ActionListener {
         cpu3.setText("<html> <strong>CPU 3</strong> <br> Chips: " + String.valueOf(players[3].chips) + " </html>");
         cpu4.setText("<html> <strong>CPU 4</strong> <br> Chips: " + String.valueOf(players[4].chips) + " </html>");
         currentPot.setText("<html> <h2><strong>POT: </strong>" + String.valueOf(pot) + "</h2> </html>");
+        showBet.setText("<html><h2>"+ String.valueOf(playerBet) + "</h2></html>");
 
         repaint(); //repaints the image every 10 milliseconds
 
