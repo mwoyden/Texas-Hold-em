@@ -27,7 +27,7 @@ public class GUI extends JPanel implements ActionListener {
     private static final int VELOCITY = 3;
     public static BufferedImage image1;
 
-    Timer clock = new Timer(10, this); //this ActionListener
+    Timer clock = new Timer(8, this); //this ActionListener
     Image image;
     String path;
     ImageIcon i;
@@ -487,9 +487,13 @@ public class GUI extends JPanel implements ActionListener {
     public static String parseCPU0(String text) {
         String newText = "";
         CharSequence cpu0 = "CPU 0";
+        String cpu1 = "CPU 1 ";
 
         if (text.contains(cpu0)) {
-            newText = text;
+            //changes CPU 0 TO CPU 1 by appending cutting out beginning and appending new beginning
+            newText = text.substring(6);
+            newText = cpu1 + newText;
+            
             return newText;
         }
 
@@ -500,9 +504,13 @@ public class GUI extends JPanel implements ActionListener {
     public static String parseCPU1(String text) {
         String newText = "";
         CharSequence cpu1 = "CPU 1";
+        String cpu2 = "CPU 2 ";
 
         if (text.contains(cpu1)) {
-            newText = text;
+            //changes CPU 1 TO CPU 2 by appending cutting out beginning and appending new beginning
+            newText = text.substring(6);
+            newText = cpu2 + newText;
+            
             return newText;
         }
 

@@ -384,7 +384,7 @@ public class TexasHoldem extends JFrame {
                     waitCPU(i, s);
                     if ((currentBet = players[i].decide(round, currentBet, board, i, smallBlind, bigBlind)) == 0) { //CPU folded or checked
                         if (i == bigBlind && round == 1 && players[i].status == 1) { //If big blind checks in round 1
-                            s = "BIG BLIND (CPU " + i + ") CHECKED";
+                            //s = "BIG BLIND (CPU " + i + ") CHECKED";
                             waitCPU(i, s);
                             players[i].bet += BB_BET; //Error handles the big blind from calling later on
                             pot += currentBet; //Adds the bet to the pot
@@ -464,7 +464,7 @@ public class TexasHoldem extends JFrame {
     public static void waitCPU(int i, String s) {
         System.out.println(s); //Prints the step
         try {
-            sleep(500);
+            sleep(1000);
         } catch (InterruptedException ex) {
         }
     }
