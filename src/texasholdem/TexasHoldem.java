@@ -26,7 +26,7 @@ public class TexasHoldem extends JFrame {
     public static boolean called = false, folded = false, betted = false;
 
     public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot, showBet; //for the cpu labels and chip count 
-    public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action; //for the labels of the cpu actions
+    public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action, playerAction; //for the labels of the cpu actions
 
     //Final variables
     private static final int DECK_LENGTH = 104;
@@ -604,13 +604,14 @@ public class TexasHoldem extends JFrame {
         cpu4 = createText(String.valueOf(players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
         currentPot = createText(String.valueOf(pot), 360, 180, TEXT_WIDTH + 20, TEXT_HEIGHT + 50);
         showBet = createText(String.valueOf(playerBet), 220, 478, TEXT_WIDTH, TEXT_HEIGHT);
-        
+
         //create the label for the cpu's actions
         cpu1Action = createText("", 640, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
         cpu2Action = createText("", 620, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
-        cpu3Action = createText("", 70, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
-        cpu4Action = createText("", 100, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
-        
+        cpu3Action = createText("", 80, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu4Action = createText("", 70, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        playerAction = createText("", 460, 460, TEXT_WIDTH + 20, TEXT_HEIGHT);
+
         //location for call and fold button
         call.setBounds(275, 510, 59, 25);
         call.setLocation(275, 510);
@@ -648,12 +649,12 @@ public class TexasHoldem extends JFrame {
         panel.add(minus);
 
         //add the cpu's action labels
-        
         panel.add(cpu1Action);
         panel.add(cpu2Action);
         panel.add(cpu3Action);
         panel.add(cpu4Action);
-        
+        panel.add(playerAction);
+
         call.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -675,6 +676,12 @@ public class TexasHoldem extends JFrame {
         bet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (round == 1 && playerBet < 100) {
+                    return;
+                }
+                if (playerBet < currentBet) {
+                    return;
+                }
                 players[2].bet(playerBet);
                 betted = true;
                 playerBet = 0;
@@ -687,6 +694,14 @@ public class TexasHoldem extends JFrame {
                 if (players[2].chips > playerBet + 10) {
                     playerBet += 10;
                 }
+                if (playerBet > 0 && playerBet < 100) {
+                    showBet.setBounds(215, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(215, 478);
+                }
+                if (playerBet >= 100) {
+                    showBet.setBounds(210, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(210, 478);
+                }
             }
         });
 
@@ -695,6 +710,18 @@ public class TexasHoldem extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (playerBet - 10 >= 0) {
                     playerBet -= 10;
+                }
+                if (playerBet == 0) {
+                    showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(220, 478);
+                }
+                if (playerBet > 0 && playerBet < 100) {
+                    showBet.setBounds(215, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(215, 478);
+                }
+                if (playerBet >= 100) {
+                    showBet.setBounds(210, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(210, 478);
                 }
             }
         });
