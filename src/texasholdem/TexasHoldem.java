@@ -10,7 +10,12 @@ import javax.swing.*;
 import static texasholdem.GUI.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public class TexasHoldem extends JFrame {
 
@@ -23,7 +28,7 @@ public class TexasHoldem extends JFrame {
     public static BufferedImage image;
     public static String path, s = "";
     public static int pot, round, currentBet, smallBlind, bigBlind, playerBet;
-    public static boolean called = false, folded = false, betted = false;
+    public static boolean called = false, folded = false, betted = false, takingTurn = false;
 
     public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot, showBet; //for the cpu labels and chip count 
     public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action, playerAction; //for the labels of the cpu actions
@@ -194,6 +199,11 @@ public class TexasHoldem extends JFrame {
                 in++;
             }
         }
+        for (i = 0; i < NUM_PLAYERS; i++) {
+            if (players[i].status == 0 && players[i].chips <= 0) {
+                players[i].chips = 0;
+            }
+        }
         if (in == 1) {
             awardPot(winner);
             return true;
@@ -208,8 +218,83 @@ public class TexasHoldem extends JFrame {
      */
     public static void awardPot(int winner) {
         players[winner].chips += pot;
-        System.out.println("PLAYER " + winner + " WINS!!!");
+        if (winner == 2) {
+            s = "PLAYER " + winner + " WINS!!!";
+        } else {
+            s = "CPU " + winner + " WINS!!!";
+        }
+        waitCPU(winner, s);
+        checkGameEnd();
         reset();
+    }
+
+    /**
+     * Check the status of the end of the game
+     */
+    public static void checkGameEnd() {
+        int i = 0, out = 0;
+        for (i = 0; i < NUM_PLAYERS; i++) {
+            if (players[i].chips <= 0) {
+                players[i].chips = 0;
+                out++;
+            }
+            if (players[2].chips == 0) {
+                endGame();
+                return;
+            }
+        }
+        if (out == 4) {
+            winGame();
+        }
+    }
+
+    /**
+     * End the game if the player loses.
+     */
+    public static void endGame() {
+        called = false;
+        folded = false;
+        betted = false;
+        takingTurn = false;
+        resetDealing();
+        resetFlopDealing();
+        resetTurnDealing();
+        resetRiverDealing();
+        cpuDealing = false;
+        currentPot.setText("<html> <h2><strong>GAME OVER</strong></h2> </html>");
+        gui.repaint();
+        while (!cpuDealing) {
+            try {
+                sleep(1);
+            } catch (InterruptedException ex) {
+            }
+
+        }
+    }
+
+    /**
+     * If the player won the game
+     */
+    public static void winGame() {
+        called = false;
+        folded = false;
+        betted = false;
+        takingTurn = false;
+        resetDealing();
+        resetFlopDealing();
+        resetTurnDealing();
+        resetRiverDealing();
+        cpuDealing = false;
+        currentPot.setText("<html> <h2><strong>YOU WIN!!!</strong></h2></html>");
+        gui.repaint();
+        while (!cpuDealing) {
+            try {
+                sleep(1);
+            } catch (InterruptedException ex) {
+            }
+
+        }
+
     }
 
     /**
@@ -322,13 +407,14 @@ public class TexasHoldem extends JFrame {
             pot += players[2].bet;
         }
          */
+        takingTurn = true;
         while (!called && !folded && !betted) {
             try {
                 sleep(1);
             } catch (InterruptedException ex) {
             }
         }
-
+        takingTurn = false;
     }
 
     /**
@@ -358,6 +444,7 @@ public class TexasHoldem extends JFrame {
      */
     public static void placeBets() {
         System.out.println("PLACING BETS IN ROUND: " + round);
+        gui.playSound("cardSlide", 1, 8);
         currentBet = BB_BET; //Set the minumum bet to the BB_BET (100)
         int i = smallBlind, j = 0;
         //String s = ""; //String used to waitCPU steps
@@ -658,9 +745,13 @@ public class TexasHoldem extends JFrame {
         call.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                players[2].call(currentBet);
-                called = true;
-
+                if (takingTurn) {
+                    players[2].call(currentBet);
+                    called = true;
+                    playerBet = 0;
+                    showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(220, 478);
+                }
             }
         });
 
@@ -668,39 +759,50 @@ public class TexasHoldem extends JFrame {
         fold.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                players[2].fold();
-                folded = true;
+                if (takingTurn) {
+                    players[2].fold();
+                    folded = true;
+                    playerBet = 0;
+                    showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(220, 478);
+                }
             }
         });
 
         bet.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (round == 1 && playerBet < 100) {
-                    return;
+                if (takingTurn) {
+                    if (round == 1 && playerBet < 100) {
+                        return;
+                    }
+                    if (playerBet < currentBet) {
+                        return;
+                    }
+                    players[2].bet(playerBet);
+                    betted = true;
+                    playerBet = 0;
+                    showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                    showBet.setLocation(220, 478);
                 }
-                if (playerBet < currentBet) {
-                    return;
-                }
-                players[2].bet(playerBet);
-                betted = true;
-                playerBet = 0;
             }
         });
 
         plus.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (players[2].chips >= playerBet + 10) {
-                    playerBet += 10;
-                }
-                if (playerBet > 0 && playerBet < 100) {
-                    showBet.setBounds(215, 478, TEXT_WIDTH, TEXT_HEIGHT);
-                    showBet.setLocation(215, 478);
-                }
-                if (playerBet >= 100) {
-                    showBet.setBounds(210, 478, TEXT_WIDTH, TEXT_HEIGHT);
-                    showBet.setLocation(210, 478);
+                if (takingTurn) {
+                    if (players[2].chips >= playerBet + 10) {
+                        playerBet += 10;
+                    }
+                    if (playerBet > 0 && playerBet < 100) {
+                        showBet.setBounds(215, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                        showBet.setLocation(215, 478);
+                    }
+                    if (playerBet >= 100) {
+                        showBet.setBounds(210, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                        showBet.setLocation(210, 478);
+                    }
                 }
             }
         });
@@ -708,20 +810,22 @@ public class TexasHoldem extends JFrame {
         minus.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (playerBet - 10 >= 0) {
-                    playerBet -= 10;
-                }
-                if (playerBet == 0) {
-                    showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
-                    showBet.setLocation(220, 478);
-                }
-                if (playerBet > 0 && playerBet < 100) {
-                    showBet.setBounds(215, 478, TEXT_WIDTH, TEXT_HEIGHT);
-                    showBet.setLocation(215, 478);
-                }
-                if (playerBet >= 100) {
-                    showBet.setBounds(210, 478, TEXT_WIDTH, TEXT_HEIGHT);
-                    showBet.setLocation(210, 478);
+                if (takingTurn) {
+                    if (playerBet - 10 >= 0) {
+                        playerBet -= 10;
+                    }
+                    if (playerBet == 0) {
+                        showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                        showBet.setLocation(220, 478);
+                    }
+                    if (playerBet > 0 && playerBet < 100) {
+                        showBet.setBounds(215, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                        showBet.setLocation(215, 478);
+                    }
+                    if (playerBet >= 100) {
+                        showBet.setBounds(210, 478, TEXT_WIDTH, TEXT_HEIGHT);
+                        showBet.setLocation(210, 478);
+                    }
                 }
             }
         });

@@ -58,8 +58,7 @@ public class Player extends Person {
      */
     @Override
     public void bet(int b) {
-        bet = b;
-        chips -= b;
+        super.bet(b);
     }
 
     /**
@@ -72,6 +71,7 @@ public class Player extends Person {
      */
     @Override
     public void call(int currentBet) {
+        super.call(currentBet);
         bet(currentBet - bet);
         if (currentBet == 0) {
             System.out.println("Player checks");
