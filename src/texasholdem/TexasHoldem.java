@@ -26,7 +26,7 @@ public class TexasHoldem extends JFrame {
     public static boolean called = false, folded = false, betted = false;
 
     public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot, showBet; //for the cpu labels and chip count 
-    public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action; //for the labels of the cpu actions
+    public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action, playerAction; //for the labels of the cpu actions
 
     //Final variables
     private static final int DECK_LENGTH = 104;
@@ -604,13 +604,14 @@ public class TexasHoldem extends JFrame {
         cpu4 = createText(String.valueOf(players[4].chips), 70, 70, TEXT_WIDTH, TEXT_HEIGHT);
         currentPot = createText(String.valueOf(pot), 360, 180, TEXT_WIDTH + 20, TEXT_HEIGHT + 50);
         showBet = createText(String.valueOf(playerBet), 220, 478, TEXT_WIDTH, TEXT_HEIGHT);
-        
+
         //create the label for the cpu's actions
         cpu1Action = createText("", 640, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
         cpu2Action = createText("", 620, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
-        cpu3Action = createText("", 70, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
-        cpu4Action = createText("", 100, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
-        
+        cpu3Action = createText("", 80, 430, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        cpu4Action = createText("", 70, 220, TEXT_WIDTH + 20, TEXT_HEIGHT);
+        playerAction = createText("", 460 , 460, TEXT_WIDTH + 20, TEXT_HEIGHT);
+
         //location for call and fold button
         call.setBounds(275, 510, 59, 25);
         call.setLocation(275, 510);
@@ -652,6 +653,7 @@ public class TexasHoldem extends JFrame {
         panel.add(cpu2Action);
         panel.add(cpu3Action);
         panel.add(cpu4Action);
+        panel.add(playerAction);
 
         call.addActionListener(new ActionListener() {
             @Override

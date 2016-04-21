@@ -459,15 +459,86 @@ public class GUI extends JPanel implements ActionListener {
         cpu3.setText("<html> <strong>CPU 3</strong> <br> Chips: " + String.valueOf(players[3].chips) + " </html>");
         cpu4.setText("<html> <strong>CPU 4</strong> <br> Chips: " + String.valueOf(players[4].chips) + " </html>");
         currentPot.setText("<html> <h2><strong>POT: </strong>" + String.valueOf(pot) + "</h2> </html>");
-        showBet.setText("<html><h2>"+ String.valueOf(playerBet) + "</h2></html>");
-        
+        showBet.setText("<html><h2>" + String.valueOf(playerBet) + "</h2></html>");
+
         //UPDATE THE ACTION LABELS OF THE CPUS
-        cpu1Action.setText(s);
-        cpu2Action.setText(s);
-        cpu3Action.setText(s);
-        cpu4Action.setText(s);
+        cpu1Action.setText(parseCPU0(s));
+        cpu2Action.setText(parseCPU1(s));
+        cpu3Action.setText(parseCPU2(s));
+        cpu4Action.setText(parseCPU3(s));
+        playerAction.setText(parsePlayer(s));
+        
+        //cpu1Action.setText(s);
+        //cpu2Action.setText(s);
+        //cpu3Action.setText(s);
+        //cpu4Action.setText(s);
 
         repaint(); //repaints the image every 10 milliseconds
+
+    }
+
+    public static String parseCPU0(String text) {
+        String newText = "";
+        CharSequence cpu0 = "CPU 0";
+
+        if (text.contains(cpu0)) {
+            newText = text;
+            return newText;
+        }
+
+        return newText;
+
+    }
+
+    public static String parseCPU1(String text) {
+        String newText = "";
+        CharSequence cpu1 = "CPU 1";
+
+        if (text.contains(cpu1)) {
+            newText = text;
+            return newText;
+        }
+
+        return newText;
+
+    }
+
+    public static String parseCPU2(String text) {
+        String newText = "";
+        CharSequence cpu3 = "CPU 3";
+
+        if (text.contains(cpu3)) {
+            newText = text;
+            return newText;
+        }
+
+        return newText;
+
+    }
+
+    public static String parseCPU3(String text) {
+        String newText = "";
+        CharSequence cpu4 = "CPU 4";
+
+        if (text.contains(cpu4)) {
+            newText = text;
+            return newText;
+        }
+
+        return newText;
+
+    }
+    
+    public static String parsePlayer(String text) {
+        String newText = "";
+        CharSequence player = "Player";
+
+        if (text.contains(player)) {
+            newText = "YOUR TURN!";
+            return newText;
+        }
+
+        return newText;
 
     }
 
