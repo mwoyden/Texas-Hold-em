@@ -25,6 +25,7 @@ public class GUI extends JPanel implements ActionListener {
     private static final int STARTING_X = 455;
     private static final int STARTING_Y = 100;
     private static final int VELOCITY = 3;
+    private static final int RACK_Y = 100;
     public static BufferedImage image1;
 
     Timer clock = new Timer(10, this); //this ActionListener
@@ -41,8 +42,8 @@ public class GUI extends JPanel implements ActionListener {
     int[] extraX = {STARTING_X, STARTING_X + 2, STARTING_X + 4};
     int[] extraY = {STARTING_Y, STARTING_Y + 2, STARTING_Y + 4};
 
-    static int[] chipsX = {360};
-    static int[] chipsY = {140};
+    static int[] chipsX = {335, 361, 384, 406, 427};
+    static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y};
 
     /* CPUS GLOBAL VARIABLES*/
     static int[] cpuX = {STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X};
@@ -98,15 +99,11 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealCPU0(Graphics g) {
         //first card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[0], cpuY[0], this);
 
         //second card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[1], cpuY[1], this);
@@ -115,15 +112,11 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealCPU1(Graphics g) {
         //first card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[2], cpuY[2], this);
 
         //second card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[3], cpuY[3], this);
@@ -132,15 +125,11 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealCPU2(Graphics g) {
         //first card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[4], cpuY[4], this);
 
         //second card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[5], cpuY[5], this);
@@ -149,15 +138,11 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealCPU3(Graphics g) {
         //first card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[6], cpuY[6], this);
 
         //second card
-        //path = System.getProperty("user.dir") + "/src/texasholdem/sprites/card_back.jpg";
-        //i = new ImageIcon(path);
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
         image = i.getImage();
         g.drawImage(image, cpuX[7], cpuY[7], this);
@@ -235,10 +220,27 @@ public class GUI extends JPanel implements ActionListener {
 
     }
 
-    public void drawChips(Graphics g) {
-        i = new ImageIcon(this.getClass().getResource("/texasholden/sprites/poker_chips_blue.jpg"));
+    public void drawChipRack(Graphics g) {
+        //Show blue chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_blue.jpg"));
         image = i.getImage();
         g.drawImage(image, chipsX[0], chipsY[0], this);
+        //Show black chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_black.jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[1], chipsY[1], this);
+        //Show green chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_green.jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[2], chipsY[2], this);
+        //Show white chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_white.jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[3], chipsY[3], this);
+        //Show red chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_red.jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[4], chipsY[4], this);
 
     }
 
@@ -248,6 +250,9 @@ public class GUI extends JPanel implements ActionListener {
 
         //draws the table
         createTable(g);
+        
+        //Draw chips rack
+        drawChipRack(g);
 
         if (players[2].status == 1) {
             //deals face up cards for the player
@@ -284,8 +289,6 @@ public class GUI extends JPanel implements ActionListener {
         if (riverDealing) {
             dealRiver(g, DECK_MAP[board[4].id]);
         }
-        
-        //drawChips(g);
 
         //shows extra cards on table
         showExtraCards(g);
