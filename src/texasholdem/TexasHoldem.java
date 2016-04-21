@@ -11,19 +11,22 @@ import static texasholdem.GUI.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TexasHoldem extends JFrame {
 
     //Global variables
     public static JFrame jf;
     public static GUI gui;
+    public static startGUI start; //startmenu - just for the table and the buttons
     public static TexasHoldem game;
     public static Card[] deck, board;
     public static Person[] players;
     public static BufferedImage image;
     public static String path, s = "";
     public static int pot, round, currentBet, smallBlind, bigBlind, playerBet;
-    public static boolean called = false, folded = false, betted = false;
+    public static boolean called = false, folded = false, betted = false, play = false;
 
     public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot, showBet; //for the cpu labels and chip count 
     public static JLabel cpu1Action, cpu2Action, cpu3Action, cpu4Action, playerAction; //for the labels of the cpu actions
@@ -78,6 +81,14 @@ public class TexasHoldem extends JFrame {
         }
         System.out.println(DECK_MAP[60]);
          //*/
+
+        while (!play) {
+            try {
+                sleep(1000);
+            } catch (InterruptedException ex) {
+
+            }
+        }
         play();
     }
 
@@ -584,10 +595,11 @@ public class TexasHoldem extends JFrame {
      */
     public static void initGUI() {
         System.out.println("INITIALIZING GUI...");
+
         gui = new GUI();
         jf = new JFrame();
 
-        final JPanel panel = (JPanel) jf.getGlassPane();
+        final JPanel panel2 = (JPanel) jf.getGlassPane();
         final JButton call = new JButton("Call"); //creates call button
         final JButton fold = new JButton("Fold"); //creates fold button
 
@@ -625,35 +637,35 @@ public class TexasHoldem extends JFrame {
         minus.setLocation(200, 510);
 
         //call.setLayout(null);
-        panel.setLayout(null);
+        panel2.setLayout(null);
 
-        panel.setBounds(360, 550, 60, 25);
+        panel2.setBounds(360, 550, 60, 25);
+
+        panel2.setVisible(true);
+
+        //add cpu's labels
+        panel2.add(cpu1);
+        panel2.add(cpu2);
+        panel2.add(cpu3);
+        panel2.add(cpu4);
+        panel2.add(player);
+        panel2.add(currentPot);
+        panel2.add(showBet);
+        panel2.add(call);
+        panel2.add(fold);
+        panel2.add(bet);
+        panel2.add(plus);
+        panel2.add(minus);
+
+        //add the cpu's action labels
+        panel2.add(cpu1Action);
+        panel2.add(cpu2Action);
+        panel2.add(cpu3Action);
+        panel2.add(cpu4Action);
+        panel2.add(playerAction);
 
         //adds table and deck spirte
         jf.add(gui);
-
-        panel.setVisible(true);
-
-        //add cpu's labels
-        panel.add(cpu1);
-        panel.add(cpu2);
-        panel.add(cpu3);
-        panel.add(cpu4);
-        panel.add(player);
-        panel.add(currentPot);
-        panel.add(showBet);
-        panel.add(call);
-        panel.add(fold);
-        panel.add(bet);
-        panel.add(plus);
-        panel.add(minus);
-
-        //add the cpu's action labels
-        panel.add(cpu1Action);
-        panel.add(cpu2Action);
-        panel.add(cpu3Action);
-        panel.add(cpu4Action);
-        panel.add(playerAction);
 
         call.addActionListener(new ActionListener() {
             @Override
@@ -736,6 +748,57 @@ public class TexasHoldem extends JFrame {
 
     }
 
+    public static void startMenu() {
+        jf = new JFrame();
+        start = new startGUI();
+
+        final JPanel panel = (JPanel) jf.getGlassPane();
+        final JButton play = new JButton();
+        final JButton quit = new JButton();
+        final JButton credits = new JButton();
+
+        panel.setLayout(null);
+        panel.setBounds(360, 550, 60, 25);
+
+        //adds table and deck spirte
+        jf.add(start);
+
+        panel.setVisible(true);
+
+        //sets the text of the buttons
+        play.setText("PLAY");
+        quit.setText("QUIT");
+        credits.setText("SHOW CREDITS");
+
+        //location and size for buttons
+        play.setBounds(300, 160, 200, 50);
+        play.setLocation(300, 160);
+        quit.setBounds(300, 230, 200, 50);
+        quit.setLocation(300, 230);
+        credits.setBounds(300, 300, 200, 50);
+        credits.setLocation(300, 300);
+
+        //adds the buttons
+        panel.add(play);
+        panel.add(quit);
+        panel.add(credits);
+
+        play.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                initGUI();
+
+            }
+        });
+
+        jf.setTitle("Texas Hold'em");
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        jf.setVisible(true);
+
+    }
+
     /**
      * Initializes the game by calling the constructor
      */
@@ -788,6 +851,8 @@ public class TexasHoldem extends JFrame {
     public TexasHoldem() {
         initPlayers(1000);
         initDeck();
+        //startMenu();
         initGUI();
+
     }
 }

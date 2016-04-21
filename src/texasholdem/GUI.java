@@ -250,51 +250,56 @@ public class GUI extends JPanel implements ActionListener {
 
         //draws the table
         createTable(g);
-        
-        //Draw chips rack
-        drawChipRack(g);
 
-        if (players[2].status == 1) {
-            //deals face up cards for the player
-            dealPlayer(g, DECK_MAP[players[2].hole[0].id], DECK_MAP[players[2].hole[1].id]);
-        }
+        if (play) {
+            //draws the table
+            createTable(g);
 
-        if (cpuDealing) {
-            //deals facedown cards for the CPU's
-            if (players[0].status == 1) {
-                dealCPU0(g);
+            //Draw chips rack
+            drawChipRack(g);
+
+            if (players[2].status == 1) {
+                //deals face up cards for the player
+                dealPlayer(g, DECK_MAP[players[2].hole[0].id], DECK_MAP[players[2].hole[1].id]);
             }
-            if (players[1].status == 1) {
-                dealCPU1(g);
+
+            if (cpuDealing) {
+                //deals facedown cards for the CPU's
+                if (players[0].status == 1) {
+                    dealCPU0(g);
+                }
+                if (players[1].status == 1) {
+                    dealCPU1(g);
+                }
+                if (players[3].status == 1) {
+                    dealCPU2(g);
+                }
+                if (players[4].status == 1) {
+                    dealCPU3(g);
+                }
             }
-            if (players[3].status == 1) {
-                dealCPU2(g);
+
+            //deals three cards face up for the flop
+            if (flopDealing) {
+                dealFlop(g, DECK_MAP[board[0].id], DECK_MAP[board[1].id], DECK_MAP[board[2].id]);
             }
-            if (players[4].status == 1) {
-                dealCPU3(g);
+
+            //deals one card for the turn
+            if (turnDealing) {
+                dealTurn(g, DECK_MAP[board[3].id]);
             }
+
+            //deals one card for the river
+            if (riverDealing) {
+                dealRiver(g, DECK_MAP[board[4].id]);
+            }
+
+            //shows extra cards on table
+            showExtraCards(g);
+
+            //important-starts the timer
+            clock.start();
         }
-
-        //deals three cards face up for the flop
-        if (flopDealing) {
-            dealFlop(g, DECK_MAP[board[0].id], DECK_MAP[board[1].id], DECK_MAP[board[2].id]);
-        }
-
-        //deals one card for the turn
-        if (turnDealing) {
-            dealTurn(g, DECK_MAP[board[3].id]);
-        }
-
-        //deals one card for the river
-        if (riverDealing) {
-            dealRiver(g, DECK_MAP[board[4].id]);
-        }
-
-        //shows extra cards on table
-        showExtraCards(g);
-
-        //important-starts the timer
-        clock.start();
 
     }
 
@@ -475,14 +480,14 @@ public class GUI extends JPanel implements ActionListener {
         cpu4.setText("<html> <strong>CPU 4</strong> <br> Chips: " + String.valueOf(players[4].chips) + " </html>");
         currentPot.setText("<html> <h2><strong>POT: </strong>" + String.valueOf(pot) + "</h2> </html>");
         showBet.setText("<html><h2>" + String.valueOf(playerBet) + "</h2></html>");
-        
+
         //UPDATE THE ACTION LABELS OF THE CPUS
         cpu1Action.setText(parseCPU0(s));
         cpu2Action.setText(parseCPU1(s));
         cpu3Action.setText(parseCPU2(s));
         cpu4Action.setText(parseCPU3(s));
         playerAction.setText(parsePlayer(s));
-        
+
         repaint(); //repaints the image every 10 milliseconds
 
     }
@@ -496,7 +501,7 @@ public class GUI extends JPanel implements ActionListener {
             //changes CPU 0 TO CPU 1 by appending cutting out beginning and appending new beginning
             newText = text.substring(6);
             newText = cpu1 + newText;
-            
+
             return newText;
         }
 
@@ -513,7 +518,7 @@ public class GUI extends JPanel implements ActionListener {
             //changes CPU 1 TO CPU 2 by appending cutting out beginning and appending new beginning
             newText = text.substring(6);
             newText = cpu2 + newText;
-            
+
             return newText;
         }
 
@@ -546,7 +551,7 @@ public class GUI extends JPanel implements ActionListener {
         return newText;
 
     }
-    
+
     public static String parsePlayer(String text) {
         String newText = "";
         CharSequence player = "Player";
