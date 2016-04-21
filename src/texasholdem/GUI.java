@@ -42,7 +42,7 @@ public class GUI extends JPanel implements ActionListener {
     int[] extraX = {STARTING_X, STARTING_X + 2, STARTING_X + 4};
     int[] extraY = {STARTING_Y, STARTING_Y + 2, STARTING_Y + 4};
 
-    static int[] chipsX = {335, 361, 384, 406, 427};
+    static int[] chipsX = {335, 358, 381, 403, 427};
     static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y};
 
     /* CPUS GLOBAL VARIABLES*/

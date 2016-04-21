@@ -691,7 +691,7 @@ public class TexasHoldem extends JFrame {
         plus.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (players[2].chips > playerBet + 10) {
+                if (players[2].chips >= playerBet + 10) {
                     playerBet += 10;
                 }
                 if (playerBet > 0 && playerBet < 100) {
