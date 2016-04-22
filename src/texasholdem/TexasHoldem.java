@@ -1,7 +1,6 @@
 package texasholdem;
 
 import java.awt.Color;
-import java.awt.GridBagLayout;
 import java.util.*;
 import javax.swing.JPanel;
 import java.awt.image.*;
@@ -10,10 +9,6 @@ import javax.swing.*;
 import static texasholdem.GUI.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -748,6 +743,7 @@ public class TexasHoldem extends JFrame {
                 if (takingTurn) {
                     players[2].call(currentBet);
                     called = true;
+                    pot += currentBet;
                     playerBet = 0;
                     showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
                     showBet.setLocation(220, 478);
@@ -780,6 +776,7 @@ public class TexasHoldem extends JFrame {
                         return;
                     }
                     players[2].bet(playerBet);
+                    pot += playerBet;
                     betted = true;
                     playerBet = 0;
                     showBet.setBounds(220, 478, TEXT_WIDTH, TEXT_HEIGHT);
