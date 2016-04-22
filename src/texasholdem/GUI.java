@@ -566,7 +566,11 @@ public class GUI extends JPanel implements ActionListener {
         player.setText("<html> <strong>PLAYER</strong> <br> Chips: " + String.valueOf(players[2].chips) + " </html>");
         cpu3.setText("<html> <strong>CPU 3</strong> <br> Chips: " + String.valueOf(players[3].chips) + " </html>");
         cpu4.setText("<html> <strong>CPU 4</strong> <br> Chips: " + String.valueOf(players[4].chips) + " </html>");
-        currentPot.setText("<html> <h2><strong>POT: </strong>" + String.valueOf(pot) + "</h2> </html>");
+        if (POT_TEXT.contains("POT")) {
+            currentPot.setText("<html> <h2><strong>" + POT_TEXT + "</strong>" + String.valueOf(pot) + "</h2> </html>");
+        } else {
+            currentPot.setText("<html> <h2><strong>" + POT_TEXT + "</strong></h2> </html>");
+        }
         showBet.setText("<html><h2>" + String.valueOf(playerBet) + "</h2></html>");
 
         //UPDATE THE ACTION LABELS OF THE CPUS
@@ -647,7 +651,7 @@ public class GUI extends JPanel implements ActionListener {
         if (text.equals("Player betting...")) {
             newText = "YOUR TURN!";
             return newText;
-        }else if(text.contains(player)){
+        } else if (text.contains(player)) {
             newText = "You Win!";
             return newText;
         }

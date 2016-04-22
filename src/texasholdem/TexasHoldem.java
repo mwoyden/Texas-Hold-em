@@ -21,7 +21,7 @@ public class TexasHoldem extends JFrame {
     public static Card[] deck, board;
     public static Person[] players;
     public static BufferedImage image;
-    public static String path, s = "";
+    public static String path, s = "", POT_TEXT = "POT: ";
     public static int pot, round, currentBet, smallBlind, bigBlind, playerBet, escrow = -1;
     public static boolean called = false, folded = false, betted = false, takingTurn = false, play = false;
 
@@ -269,6 +269,7 @@ public class TexasHoldem extends JFrame {
         resetRiverDealing();
         cpuDealing = false;
         currentPot.setText("<html> <h2><strong>GAME OVER</strong></h2> </html>");
+        POT_TEXT = "GAME OVER";
         gui.repaint();
         while (!cpuDealing) {
             try {
@@ -293,6 +294,7 @@ public class TexasHoldem extends JFrame {
         resetRiverDealing();
         cpuDealing = false;
         currentPot.setText("<html> <h2><strong>YOU WIN!!!</strong></h2></html>");
+        POT_TEXT = "YOU WIN!!!";
         gui.repaint();
         while (!cpuDealing) {
             try {
@@ -977,7 +979,7 @@ public class TexasHoldem extends JFrame {
      * Constructor called by init(), initializes the deck and the players
      */
     public TexasHoldem() {
-        initPlayers(1000);
+        initPlayers(200);
         initDeck();
         initGUI();
 
