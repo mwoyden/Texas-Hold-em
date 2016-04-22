@@ -22,7 +22,7 @@ public class TexasHoldem extends JFrame {
     public static Person[] players;
     public static BufferedImage image;
     public static String path, s = "";
-    public static int pot, round, currentBet, smallBlind, bigBlind, playerBet;
+    public static int pot, round, currentBet, smallBlind, bigBlind, playerBet, escrow = -1;
     public static boolean called = false, folded = false, betted = false, takingTurn = false, play = false;
 
     public static JLabel cpu1, cpu2, cpu3, cpu4, player, currentPot, showBet; //for the cpu labels and chip count 
@@ -146,8 +146,10 @@ public class TexasHoldem extends JFrame {
         int i = 0;
         //Evaluates the CPUs' final hands
         for (i = 0; i < NUM_PLAYERS; i++) {
-            players[i].evaluate(board, round);
-            hands[i] = players[i].hand;
+            if (players[i].status == 1) {
+                players[i].evaluate(board, round);
+                hands[i] = players[i].hand;
+            }
         }
         int winners = 1;
         //Finds if there is a tie
@@ -222,6 +224,7 @@ public class TexasHoldem extends JFrame {
      */
     public static void awardPot(int winner) {
         players[winner].chips += pot;
+        escrow = winner;
         if (winner == 2) {
             s = "PLAYER " + winner + " WINS!!!";
         } else {
@@ -471,7 +474,7 @@ public class TexasHoldem extends JFrame {
                     takeTurn(); //Take your turn to decide
                     //players[i].status = 0; //folds the player for CPU simulation
                 } else if (players[i].name.contains("CPU")) { //If the person is the CPU
-                    s = "CPU " + i + " BETTING...";
+                    s = "CPU " + i + " THINKING...";
                     waitCPU(i, s);
                     if ((currentBet = players[i].decide(round, currentBet, board, i, smallBlind, bigBlind)) == 0) { //CPU folded or checked
                         if (i == bigBlind && round == 1 && players[i].status == 1) { //If big blind checks in round 1
@@ -501,6 +504,7 @@ public class TexasHoldem extends JFrame {
                 }
             }
             if (checkPlayers()) { //If everyone folded
+                waitCPU(0, "");
                 return;
             }
             i = (i + 1) % NUM_PLAYERS; //Circle around the table
@@ -597,6 +601,7 @@ public class TexasHoldem extends JFrame {
      */
     public static void deal() {
         int i = 0;
+        escrow = -1;
         Random rand = new Random();
         System.out.println("DEALING...");
         if (players[2].chips > 0) {
@@ -662,9 +667,9 @@ public class TexasHoldem extends JFrame {
 
         if (name.contains("TEXAS")) {
             label.setText("<html><h1>" + name + "</h1></html>");
-        } else if(name.contains("Created")){
+        } else if (name.contains("Created")) {
             label.setText("<html><h3>" + name + "</h3></html>");
-        }else{
+        } else {
             label = new JLabel(name);
         }
 
@@ -717,7 +722,7 @@ public class TexasHoldem extends JFrame {
 
         //create the label for the names on the main menu
         String t = "Created By: Michael Woyden, Jedrick Boca, Tristan Anderson";
-        title = createText("TEXAS HOLD'EM", 300, 1, 500, TEXT_HEIGHT+50);
+        title = createText("TEXAS HOLD'EM", 300, 1, 500, TEXT_HEIGHT + 50);
         names = createText(t, 190, 340, 500, TEXT_HEIGHT);
 
         jf.add(gui);
@@ -727,7 +732,6 @@ public class TexasHoldem extends JFrame {
         panel1.add(quit);
         panel1.add(names);
         panel1.add(title);
-        
 
         playButton.addActionListener(new ActionListener() {
             @Override

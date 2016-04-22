@@ -101,14 +101,28 @@ public class GUI extends JPanel implements ActionListener {
 
     }
 
+    public String checkCPU1(int cpu) {
+        if (escrow == cpu) {
+            return DECK_MAP[players[cpu].hole[0].id];
+        }
+        return "card_back.jpg";
+    }
+
+    public String checkCPU2(int cpu) {
+        if (escrow == cpu) {
+            return DECK_MAP[players[cpu].hole[1].id];
+        }
+        return "card_back.jpg";
+    }
+
     public void dealCPU0(Graphics g) {
         //first card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU1(0)));
         image = i.getImage();
         g.drawImage(image, cpuX[0], cpuY[0], this);
 
         //second card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU2(0)));
         image = i.getImage();
         g.drawImage(image, cpuX[1], cpuY[1], this);
 
@@ -116,12 +130,12 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealCPU1(Graphics g) {
         //first card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU2(1)));
         image = i.getImage();
         g.drawImage(image, cpuX[2], cpuY[2], this);
 
         //second card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU2(1)));
         image = i.getImage();
         g.drawImage(image, cpuX[3], cpuY[3], this);
 
@@ -129,12 +143,12 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealCPU2(Graphics g) {
         //first card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU2(3)));
         image = i.getImage();
         g.drawImage(image, cpuX[4], cpuY[4], this);
 
         //second card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU2(3)));
         image = i.getImage();
         g.drawImage(image, cpuX[5], cpuY[5], this);
 
@@ -142,12 +156,12 @@ public class GUI extends JPanel implements ActionListener {
 
     public void dealCPU3(Graphics g) {
         //first card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU2(4)));
         image = i.getImage();
         g.drawImage(image, cpuX[6], cpuY[6], this);
 
         //second card
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/card_back.jpg"));
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/" + checkCPU2(4)));
         image = i.getImage();
         g.drawImage(image, cpuX[7], cpuY[7], this);
 
@@ -250,25 +264,35 @@ public class GUI extends JPanel implements ActionListener {
 
     public void drawChips(Graphics g) {
         //Show CPU 0 chips
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(0) + ".jpg"));
-        image = i.getImage();
-        g.drawImage(image, chipsX[5], chipsY[5], this);
+        if (players[0].chips > 0) {
+            i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(0) + ".jpg"));
+            image = i.getImage();
+            g.drawImage(image, chipsX[5], chipsY[5], this);
+        }
         //Show CPU 1 chips
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(1) + ".jpg"));
-        image = i.getImage();
-        g.drawImage(image, chipsX[6], chipsY[6], this);
-        //Show player chips
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(2) + ".jpg"));
-        image = i.getImage();
-        g.drawImage(image, chipsX[9], chipsY[9], this);
-        //Show CPU 3 chips
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(3) + ".jpg"));
-        image = i.getImage();
-        g.drawImage(image, chipsX[7], chipsY[7], this);
-        //Show CPU 4 chips
-        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(4) + ".jpg"));
-        image = i.getImage();
-        g.drawImage(image, chipsX[8], chipsY[8], this);
+        if (players[1].chips > 0) {
+            i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(1) + ".jpg"));
+            image = i.getImage();
+            g.drawImage(image, chipsX[6], chipsY[6], this);
+        }
+        if (players[2].chips > 0) {
+            //Show player chips
+            i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(2) + ".jpg"));
+            image = i.getImage();
+            g.drawImage(image, chipsX[9], chipsY[9], this);
+        }
+        if (players[3].chips > 0) {
+            //Show CPU 3 chips
+            i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(3) + ".jpg"));
+            image = i.getImage();
+            g.drawImage(image, chipsX[7], chipsY[7], this);
+        }
+        if (players[4].chips > 0) {
+            //Show CPU 4 chips
+            i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(4) + ".jpg"));
+            image = i.getImage();
+            g.drawImage(image, chipsX[8], chipsY[8], this);
+        }
         //Show pot
         /*
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/pot_" + checkPot() + ".jpg"));
