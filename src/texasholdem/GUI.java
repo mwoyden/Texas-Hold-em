@@ -14,8 +14,12 @@ import static java.lang.Thread.sleep;
 import javax.imageio.ImageIO;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Random;
 import javax.swing.*;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 import static texasholdem.TexasHoldem.*;
 
@@ -42,8 +46,8 @@ public class GUI extends JPanel implements ActionListener {
     int[] extraX = {STARTING_X, STARTING_X + 2, STARTING_X + 4};
     int[] extraY = {STARTING_Y, STARTING_Y + 2, STARTING_Y + 4};
 
-    static int[] chipsX = {335, 358, 381, 403, 427};
-    static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y};
+    static int[] chipsX = {335, 358, 381, 403, 427, 550, 530, 190, 170, 380};
+    static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y, 130, 360, 360, 130, 360};
 
     /* CPUS GLOBAL VARIABLES*/
     static int[] cpuX = {STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X};
@@ -78,7 +82,17 @@ public class GUI extends JPanel implements ActionListener {
 
     int j = 0, k = 0;
 
-    //draws the table
+    public void playSound(String s, int min, int max) {
+        Random ran = new Random();
+        int x = ran.nextInt((max - min) + 1) + min;
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/texasholdem/sounds/" + s + "" + x + ".wav");
+            AudioStream audioStream = new AudioStream(inputStream);
+            AudioPlayer.player.start(audioStream);
+        } catch (Exception e) {
+        }
+    }
+
     public void createTable(Graphics g) {
         /* DEFAULT JFRAME SIZE IS 385 X 600*/
 
@@ -244,6 +258,43 @@ public class GUI extends JPanel implements ActionListener {
 
     }
 
+    public void drawChips(Graphics g) {
+        //Show CPU 0 chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(0) + ".jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[5], chipsY[5], this);
+        //Show CPU 1 chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(1) + ".jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[6], chipsY[6], this);
+        //Show player chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(2) + ".jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[9], chipsY[9], this);
+        //Show CPU 3 chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(3) + ".jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[7], chipsY[7], this);
+        //Show CPU 4 chips
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(4) + ".jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[8], chipsY[8], this);
+
+    }
+
+    public String checkSprite(int i) {
+        if (players[i].chips > 1100) {
+            return "high";
+        }
+        if (players[i].chips <= 1100 && players[i].chips >= 700) {
+            return "medium";
+        }
+        if (players[i].chips < 700 && players[i].chips >= 300) {
+            return "low";
+        }
+        return "low";
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -251,12 +302,18 @@ public class GUI extends JPanel implements ActionListener {
         //draws the table
         createTable(g);
 
+        //Draw chips rack
+        drawChipRack(g);
+
         if (play) {
             //draws the table
             createTable(g);
 
             //Draw chips rack
             drawChipRack(g);
+
+            //Draws players chips
+            drawChips(g);
 
             if (players[2].status == 1) {
                 //deals face up cards for the player
@@ -318,7 +375,7 @@ public class GUI extends JPanel implements ActionListener {
 
         //positions for the flop
         int flopPosX = 247;
-        int flopPosY = 270;
+        int flopPosY = 250;
         int flopIncrement = 60;
 
         //positions for the turn
@@ -434,7 +491,6 @@ public class GUI extends JPanel implements ActionListener {
                 if (flopY[j] > flopPosY) {
                     flopYVel[j] = 0;
                 }
-
                 flopX[j] += flopXVel[j]; //moves image
                 flopY[j] += flopYVel[j];
 

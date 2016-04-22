@@ -83,6 +83,7 @@ public class CPU extends Person {
         if (currentBet > chips) {
             System.out.println("CALL FOLD");
             fold();
+            chips = 0;
             return false;
         }
         double r = Math.random();
@@ -141,6 +142,7 @@ public class CPU extends Person {
     public int decide(int round, int currentBet, Card[] board, int i, int smallBlind, int bigBlind) {
         if (currentBet > chips) { //If the CPU doesn't have enough chips
             System.out.println("TOO FEW CHIPS FOLD");
+            chips = 0;
             fold();
             return 0;
         }

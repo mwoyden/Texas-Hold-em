@@ -1,5 +1,9 @@
-
 package texasholdem;
+
+import java.io.InputStream;
+import java.util.Random;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public abstract class Person {
 
@@ -32,55 +36,90 @@ public abstract class Person {
         hole[1] = new Card(1, 1, 1);
         hand = 0; //Reset hand
         status = 0; //Remove from current hand
+        Random ran = new Random();
+        int x = ran.nextInt(4) + 1;
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/texasholdem/sounds/cardShove" + x + ".wav");
+            AudioStream audioStream = new AudioStream(inputStream);
+            AudioPlayer.player.start(audioStream);
+        } catch (Exception e) {
+        }
     }
 
     /**
      * Bets
-     * @param b chips to bet by 
+     *
+     * @param b chips to bet by
      */
     public void bet(int b) {
         bet = b;
         chips -= b;
+        Random ran = new Random();
+        int x = ran.nextInt(6) + 1;
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/texasholdem/sounds/chipsStack" + x + ".wav");
+            AudioStream audioStream = new AudioStream(inputStream);
+            AudioPlayer.player.start(audioStream);
+        } catch (Exception e) {
+        }
     }
 
     /**
      * Call (see CPU Override)
+     *
      * @param round
      * @param currentBet
      * @param board
-     * @return 
+     * @return
      */
     public boolean call(int round, int currentBet, Card[] board) {
+        Random ran = new Random();
+        int x = ran.nextInt(6) + 1;
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/texasholdem/sounds/chipsStack" + x + ".wav");
+            AudioStream audioStream = new AudioStream(inputStream);
+            AudioPlayer.player.start(audioStream);
+        } catch (Exception e) {
+        }
         return false;
     }
-    
+
     public void call(int currentBet) {
-        
+        Random ran = new Random();
+        int x = ran.nextInt(6) + 1;
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/texasholdem/sounds/chipsStack" + x + ".wav");
+            AudioStream audioStream = new AudioStream(inputStream);
+            AudioPlayer.player.start(audioStream);
+        } catch (Exception e) {
+        }
     }
 
     /**
      * Decides (see CPU Override)
+     *
      * @param round
      * @param currentBet
      * @param board
      * @param i
      * @param smallBlind
      * @param bigBlind
-     * @return 
+     * @return
      */
     public int decide(int round, int currentBet, Card[] board, int i, int smallBlind, int bigBlind) {
         return 0;
     }
-    
+
     /**
      * Evaluates hand (see CPU Override)
-     * @param board 
-     * @param round 
+     *
+     * @param board
+     * @param round
      */
     public void evaluate(Card[] board, int round) {
     }
-    
+
     public void printInfo() {
-        
+
     }
 }
