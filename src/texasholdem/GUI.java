@@ -642,10 +642,13 @@ public class GUI extends JPanel implements ActionListener {
 
     public static String parsePlayer(String text) {
         String newText = "";
-        CharSequence player = "Player";
+        CharSequence player = "PLAYER";
 
-        if (text.contains(player)) {
+        if (text.equals("Player betting...")) {
             newText = "YOUR TURN!";
+            return newText;
+        }else if(text.contains(player)){
+            newText = "You Win!";
             return newText;
         }
 
