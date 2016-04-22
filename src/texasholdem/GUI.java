@@ -37,7 +37,7 @@ public class GUI extends JPanel implements ActionListener {
     int[] extraY = {STARTING_Y, STARTING_Y + 2, STARTING_Y + 4};
 
     static int[] chipsX = {335, 358, 381, 403, 427, 550, 530, 190, 170, 380, 360};
-    static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y, 130, 360, 360, 130, 360, 130};
+    static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y, 130, 360, 360, 130, 360, 150};
 
     /* CPUS GLOBAL VARIABLES*/
     static int[] cpuX = {STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X};
@@ -274,13 +274,13 @@ public class GUI extends JPanel implements ActionListener {
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/pot_" + checkPot() + ".jpg"));
         image = i.getImage();
         g.drawImage(image, chipsX[10], chipsY[10], this);
-        */
+         */
     }
-    
+
     public String checkPot() {
         if (pot >= 0 && pot < 500) {
             return "small";
-        } 
+        }
         if (pot >= 500 && pot < 1000) {
             return "medium";
         }
