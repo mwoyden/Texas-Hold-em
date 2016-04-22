@@ -82,7 +82,7 @@ public class TexasHoldem extends JFrame {
 
         while (!play) {
             try {
-                sleep(1000);
+                sleep(1);
             } catch (InterruptedException ex) {
 
             }
