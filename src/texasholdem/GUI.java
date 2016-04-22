@@ -1,21 +1,11 @@
 package texasholdem;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import static java.lang.Thread.sleep;
-import javax.imageio.ImageIO;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Random;
 import javax.swing.*;
 import sun.audio.AudioPlayer;
@@ -46,8 +36,8 @@ public class GUI extends JPanel implements ActionListener {
     int[] extraX = {STARTING_X, STARTING_X + 2, STARTING_X + 4};
     int[] extraY = {STARTING_Y, STARTING_Y + 2, STARTING_Y + 4};
 
-    static int[] chipsX = {335, 358, 381, 403, 427, 550, 530, 190, 170, 380};
-    static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y, 130, 360, 360, 130, 360};
+    static int[] chipsX = {335, 358, 381, 403, 427, 550, 530, 190, 170, 380, 360};
+    static int[] chipsY = {RACK_Y, RACK_Y, RACK_Y, RACK_Y, RACK_Y, 130, 360, 360, 130, 360, 150};
 
     /* CPUS GLOBAL VARIABLES*/
     static int[] cpuX = {STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X, STARTING_X};
@@ -279,7 +269,25 @@ public class GUI extends JPanel implements ActionListener {
         i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/poker_chips_" + checkSprite(4) + ".jpg"));
         image = i.getImage();
         g.drawImage(image, chipsX[8], chipsY[8], this);
+        //Show pot
+        /*
+        i = new ImageIcon(this.getClass().getResource("/texasholdem/sprites/pot_" + checkPot() + ".jpg"));
+        image = i.getImage();
+        g.drawImage(image, chipsX[10], chipsY[10], this);
+         */
+    }
 
+    public String checkPot() {
+        if (pot >= 0 && pot < 500) {
+            return "small";
+        }
+        if (pot >= 500 && pot < 1000) {
+            return "medium";
+        }
+        if (pot >= 1000) {
+            return "large";
+        }
+        return "small";
     }
 
     public String checkSprite(int i) {
