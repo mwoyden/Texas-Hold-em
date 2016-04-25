@@ -701,6 +701,7 @@ public class TexasHoldem extends JFrame {
         final JButton playButton = new JButton();
         final JButton quit = new JButton();
 
+        final JButton leave = new JButton("Leave Game"); //creates a button to leave game and quit program
         final JButton call = new JButton("Call"); //creates call button
         final JButton fold = new JButton("Fold"); //creates fold button
 
@@ -797,6 +798,8 @@ public class TexasHoldem extends JFrame {
         plus.setLocation(200, 450);
         minus.setBounds(200, 510, 50, 25);
         minus.setLocation(200, 510);
+        leave.setBounds(FRAME_WIDTH-350, FRAME_HEIGHT-70, 135, 25);
+        leave.setLocation(FRAME_WIDTH-350, FRAME_HEIGHT-70);
 
         //call.setLayout(null);
         panel2.setLayout(null);
@@ -818,6 +821,7 @@ public class TexasHoldem extends JFrame {
         panel2.add(bet);
         panel2.add(plus);
         panel2.add(minus);
+        panel2.add(leave);
 
         //add the cpu's action labels
         panel2.add(cpu1Action);
@@ -918,6 +922,15 @@ public class TexasHoldem extends JFrame {
                 }
             }
         });
+        
+        leave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jf.dispose();
+                System.exit(0);
+
+            }
+        });
 
         jf.setTitle("Texas Hold'em");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -979,7 +992,7 @@ public class TexasHoldem extends JFrame {
      * Constructor called by init(), initializes the deck and the players
      */
     public TexasHoldem() {
-        initPlayers(200);
+        initPlayers(1000);
         initDeck();
         initGUI();
 
