@@ -929,7 +929,6 @@ public class TexasHoldem extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 jf.dispose();
                 System.exit(0);
-
             }
         });
 
@@ -937,9 +936,6 @@ public class TexasHoldem extends JFrame {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         jf.setVisible(true);
-
-        //wait 1 second
-        sleepGUI(1000);
 
     }
 
