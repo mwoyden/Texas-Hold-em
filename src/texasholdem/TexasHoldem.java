@@ -1,6 +1,7 @@
 package texasholdem;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.util.*;
 import javax.swing.JPanel;
 import java.awt.image.*;
@@ -995,6 +996,5 @@ public class TexasHoldem extends JFrame {
         initPlayers(1000);
         initDeck();
         initGUI();
-
     }
 }
