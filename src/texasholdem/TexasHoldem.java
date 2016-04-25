@@ -799,7 +799,7 @@ public class TexasHoldem extends JFrame {
         plus.setLocation(200, 450);
         minus.setBounds(200, 510, 50, 25);
         minus.setLocation(200, 510);
-        leave.setBounds(FRAME_WIDTH-350, FRAME_HEIGHT-70, 135, 25);
+        leave.setBounds(FRAME_WIDTH-350, FRAME_HEIGHT-70, 115, 25);
         leave.setLocation(FRAME_WIDTH-350, FRAME_HEIGHT-70);
 
         //call.setLayout(null);
