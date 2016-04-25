@@ -983,6 +983,5 @@ public class TexasHoldem extends JFrame {
         initPlayers(1000);
         initDeck();
         initGUI();
-
     }
 }
